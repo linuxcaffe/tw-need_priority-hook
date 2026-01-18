@@ -6,9 +6,47 @@ v0.1.0 - 2026-01-17
 Initial implementation:
 - Created directory structure matching recurrence project
 - need.rc with UDA definition and auto-assignment rules
+- need.rc initializes context.need.read with default filter
+- Command alias: task need → runs need.py report
 - on-add_priority.py hook for automatic priority assignment
 - on-modify_priority.py hook to enforce priority requirement
-- need.py companion script for dynamic context management
-- Auto-context with configurable span and due/scheduled lookahead
+- on-exit_priority.py hook to update context on completion/deletion
+- All hooks automatically maintain context.need.read in need.rc
+- Context filter includes lookback constraint to exclude old overdue tasks
+- need.py companion script for status report and span adjustment
+- Uses native 'task context need' and 'task context none' commands
+- Migration script (migrate_priority.py) to convert H/M/L to 1-6 scale
+
+CHANGES for tw-priority-hook
+=============================
+
+v0.2.0 - 2026-01-18
+-------------------
+Bug fixes:
+- Fixed context not updating after task deletion
+- on-modify now excludes the task being deleted/completed when calculating lowest priority
+- Fixed task counts in need.py to ignore active context (shows all pending tasks)
+- Fixed layout issues in need.py report (clean fixed-width columns)
+- Added detailed logging to on-modify with status detection
+- Added 'need update' command to manually recalculate context
+
+Changes:
+- Time format now user-specified (e.g., 2d, 1w, 3m) instead of converting
+- Context renamed from 'need' to 'needs' (alias is 'need')
+- Clarified that task delete triggers on-modify, not on-exit
+
+v0.1.0 - 2026-01-17
+-------------------
+Initial implementation:
+- Created directory structure matching recurrence project
+- need.rc with UDA definition and auto-assignment rules
+- need.rc initializes context.need.read with default filter
+- Command alias: task need → runs need.py report
+- on-add_priority.py hook for automatic priority assignment
+- on-modify_priority.py hook to enforce priority requirement
+- on-exit_priority.py hook to update context on completion/deletion
+- All hooks automatically maintain context.need.read in need.rc
+- Context filter includes lookback constraint to exclude old overdue tasks
+- need.py companion script for status report and span adjustment
 - Uses native 'task context need' and 'task context none' commands
 - Migration script (migrate_priority.py) to convert H/M/L to 1-6 scale

@@ -151,12 +151,13 @@ The hooks handle all context management automatically. Just use `task context ne
 
 ## How Auto-Context Works
 
-The hooks automatically maintain `context.need.read` in need.rc:
+The hooks automatically maintain `context.needs.read` in need.rc:
 
 **Automatic updates:**
 - When you add a task → on-add recalculates and updates filter
 - When you modify a task → on-modify recalculates and updates filter  
-- When you complete/delete a task → on-exit recalculates and updates filter
+- When you delete a task → on-modify detects deletion and updates filter
+- When you complete a task (`task done`) → on-exit updates filter
 
 **The filter is always current** - just activate when you want it:
 

@@ -1,0 +1,48 @@
+[2026-01-18 01:12:29] Processing task: test pri hook 1
+[2026-01-18 01:12:29] Priority already set to 4, skipping
+[2026-01-18 01:54:59] Processing task: test 1
+[2026-01-18 01:54:59] Priority already set to 1, skipping
+[2026-01-18 11:14:00] Processing task: test needs
+[2026-01-18 11:14:00] Priority already set to 1, skipping
+[2026-01-18 11:21:00] Processing task: test priotities
+[2026-01-18 11:21:00] Priority already set to 1, skipping
+[2026-01-18 11:56:02] Processing task: test pri hook
+[2026-01-18 11:56:02] Priority already set to 3, skipping
+[2026-01-18 11:58:06] Processing task: test pri hook
+[2026-01-18 11:58:06] Priority already set to 1, skipping
+[2026-01-18 12:14:28] Processing task: test pri hook
+[2026-01-18 12:14:28] Priority already set to 1
+[2026-01-18 12:14:29] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:14:29] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:16:39] Processing task: test pri hook
+[2026-01-18 12:16:39] Priority already set to 1
+[2026-01-18 12:16:39] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+3d and due.after:today-5d ) or ( scheduled.before:today+3d and sched.after:today-5d )
+[2026-01-18 12:16:39] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+3d and due.after:today-5d ) or ( scheduled.before:today+3d and sched.after:today-5d )
+[2026-01-18 12:32:11] Processing task: test task
+[2026-01-18 12:32:11] Priority already set to 1
+[2026-01-18 12:32:11] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:32:11] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:58:22] Processing task: test task
+[2026-01-18 12:58:22] Priority already set to 1
+[2026-01-18 12:58:22] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:58:22] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:29:39] Processing task: testing context switch
+[2026-01-18 16:29:39] Priority already set to 1
+[2026-01-18 16:29:39] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:29:39] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:39:05] Processing task: test 1
+[2026-01-18 16:39:05] Priority already set to 1
+[2026-01-18 16:39:05] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:39:05] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:41:40] Processing task: test another 1 test
+[2026-01-18 16:41:40] Priority already set to 1
+[2026-01-18 16:41:40] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:41:40] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:56:09] Processing task: test another 1
+[2026-01-18 16:56:09] Priority already set to 1
+[2026-01-18 16:56:09] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:56:09] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:58:02] Processing task: test yet another 1
+[2026-01-18 16:58:02] Priority already set to 1
+[2026-01-18 16:58:02] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:58:02] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )

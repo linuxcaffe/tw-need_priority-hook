@@ -1,0 +1,41 @@
+[2026-01-18 10:07:55] Lowest priority: 1, filter: priority:1 or priority:2 or due.before:today+2d or scheduled.before:today+2d
+[2026-01-18 10:07:55] Updated context.need.read=priority:1 or priority:2 or due.before:today+2d or scheduled.before:today+2d
+[2026-01-18 10:13:37] Lowest priority: 2, filter: priority:2 or priority:3 or due.before:today+2d or scheduled.before:today+2d
+[2026-01-18 10:13:37] Updated context.need.read=priority:2 or priority:3 or due.before:today+2d or scheduled.before:today+2d
+[2026-01-18 10:14:21] Priority missing on modify, restoring to default: testing chain start
+[2026-01-18 10:14:21] Lowest priority: 2, filter: priority:2 or priority:3 or due.before:today+2d or scheduled.before:today+2d
+[2026-01-18 10:14:21] Updated context.need.read=priority:2 or priority:3 or due.before:today+2d or scheduled.before:today+2d
+[2026-01-18 11:22:20] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-7d ) or ( scheduled.before:today+2d and scheduled.after:today-7d )
+[2026-01-18 11:22:20] Updated context.need.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-7d ) or ( scheduled.before:today+2d and scheduled.after:today-7d )
+[2026-01-18 11:22:20] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-7d ) or ( scheduled.before:today+2d and scheduled.after:today-7d )
+[2026-01-18 11:22:20] Updated context.need.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-7d ) or ( scheduled.before:today+2d and scheduled.after:today-7d )
+[2026-01-18 11:23:01] Lowest priority: 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-7d ) or ( scheduled.before:today+2d and scheduled.after:today-7d )
+[2026-01-18 11:23:01] Updated context.need.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-7d ) or ( scheduled.before:today+2d and scheduled.after:today-7d )
+[2026-01-18 12:15:10] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:15:10] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:15:10] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:15:10] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:17:11] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+3d and due.after:today-5d ) or ( scheduled.before:today+3d and sched.after:today-5d )
+[2026-01-18 12:17:11] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+3d and due.after:today-5d ) or ( scheduled.before:today+3d and sched.after:today-5d )
+[2026-01-18 12:32:54] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:32:54] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:58:48] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 12:58:48] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:31:12] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:31:12] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:40:51] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:40:51] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:41:55] Lowest priority: 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 16:41:55] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:00:00] === ON-MODIFY: test another 1 ===
+[2026-01-18 17:00:00] Original status: pending, Modified status: deleted
+[2026-01-18 17:00:00] Is deletion: True, Is completion: False
+[2026-01-18 17:00:00] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:00:00] Lowest priority (excluding 161cbcbf-bd54-4e87-ab40-09770710ca0d): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:00:00] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:00:21] === ON-MODIFY: test yet another 1 ===
+[2026-01-18 17:00:21] Original status: pending, Modified status: deleted
+[2026-01-18 17:00:21] Is deletion: True, Is completion: False
+[2026-01-18 17:00:21] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:00:21] Lowest priority (excluding e2b68160-4556-41c2-9dfa-6cfe0a168aa7): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:00:21] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
