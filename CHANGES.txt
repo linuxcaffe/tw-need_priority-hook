@@ -1,0 +1,14 @@
+CHANGES for tw-priority-hook
+=============================
+
+v0.1.0 - 2026-01-17
+-------------------
+Initial implementation:
+- Created directory structure matching recurrence project
+- need.rc with UDA definition and auto-assignment rules
+- on-add_priority.py hook for automatic priority assignment
+- on-modify_priority.py hook to enforce priority requirement
+- need.py companion script for dynamic context management
+- Auto-context with configurable span and due/scheduled lookahead
+- Uses native 'task context need' and 'task context none' commands
+- Migration script (migrate_priority.py) to convert H/M/L to 1-6 scale
