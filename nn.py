@@ -87,13 +87,18 @@ def get_lowest_priority():
     return None
 
 def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression"""
+    """Build context filter expression using pri.after"""
     min_pri = int(min_priority)
     max_pri = min(min_pri + int(span) - 1, 6)
     
-    # Build priority filter
-    pri_filters = [f"priority:{p}" for p in range(min_pri, max_pri + 1)]
-    pri_expr = " or ".join(pri_filters)
+    # Use pri.after:N to show priorities below N
+    # pri.after:3 shows pri:1 and pri:2
+    # So to show min_pri to max_pri, we use pri.after:(max_pri+1)
+    if max_pri < 6:
+        pri_expr = f"pri.after:{max_pri + 1}"
+    else:
+        # If max is 6, just show all priorities
+        pri_expr = "pri.any:"
     
     # Add due/scheduled with user-specified time formats
     due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
@@ -175,21 +180,21 @@ def show_report():
             lowest_level = level
             break
     
-    # Draw pyramid - simpler, fixed-width layout
+    # Draw pyramid with proper indentation
     pyramid = [
-        ('6', 'Higher Goals'),
-        ('5', 'Self Actualization'),
-        ('4', 'Esteem, Respect & Recognition'),
-        ('3', 'Love & Belonging, Friends & Family'),
-        ('2', 'Personal safety, security, health, financial'),
-        ('1', 'Physiological; Air, Water, Food & Shelter')
+        ('6', 'Higher Goals', 54),
+        ('5', 'Self Actualization', 48),
+        ('4', 'Esteem, Respect & Recognition', 39),
+        ('3', 'Love & Belonging, Friends & Family', 31),
+        ('2', 'Personal safety, security, health, financial', 17),
+        ('1', 'Physiological; Air, Water, Food & Shelter', 8)
     ]
     
-    for level, label in pyramid:
+    for level, label, indent in pyramid:
         marker = ' -->' if level == lowest_level else '    '
         count = counts[level]
-        # Fixed format: marker + level + label (left) + count (right)
-        print(f"{marker}{level}  {label:<55} ({count})")
+        padding = ' ' * indent
+        print(f"{marker}{level}  {padding}{label} ({count})")
     
     print()
     print(f"Config: span={span}, lookahead={lookahead}, lookback={lookback}")
@@ -319,11 +324,12 @@ def cmd_review():
     show_report()
     
     print("\nReview Mode")
-    print("Enter priority (1-6) or 'q' to quit")
+    print("Enter priority (1-6), <enter> to skip, or 'q' to quit")
     print("=" * 80)
     
     reviewed = 0
     updated = 0
+    skipped = 0
     
     for task in tasks:
         display_task_detail(task)
@@ -331,11 +337,18 @@ def cmd_review():
         # Prompt for priority
         while True:
             try:
-                response = input("\nAssign priority [1-6, q to quit]: ").strip().lower()
+                response = input("\nAssign priority [1-6, enter to skip, q to quit]: ").strip().lower()
                 
                 if response == 'q':
-                    print(f"\nReviewed {reviewed} tasks, updated {updated}")
+                    print(f"\nReviewed {reviewed} tasks, updated {updated}, skipped {skipped}")
                     return 0
+                
+                if response == '':
+                    # Skip this task
+                    print("⊘ Skipped")
+                    skipped += 1
+                    reviewed += 1
+                    break
                 
                 if response in ['1', '2', '3', '4', '5', '6']:
                     # Update task priority
@@ -355,13 +368,23 @@ def cmd_review():
                         print(f"✗ Error updating task: {result.stderr}")
                         break
                 else:
-                    print("Invalid input. Enter 1-6 or 'q'")
+                    print("Invalid input. Enter 1-6, press enter to skip, or 'q'")
             
             except (KeyboardInterrupt, EOFError):
-                print(f"\n\nReviewed {reviewed} tasks, updated {updated}")
+                print(f"\n\nReviewed {reviewed} tasks, updated {updated}, skipped {skipped}")
                 return 0
+        
+        # Clear screen and show pyramid before next task (if not done)
+        if reviewed < len(tasks):
+            # Clear screen
+            subprocess.run(['clear'], shell=True)
+            show_report()
+            print("\nReview Mode")
+            print("Enter priority (1-6), <enter> to skip, or 'q' to quit")
+            print(f"Progress: {reviewed}/{len(tasks)}")
+            print("=" * 80)
     
-    print(f"\nAll tasks reviewed! Updated {updated} tasks")
+    print(f"\nAll tasks reviewed! Updated {updated} tasks, skipped {skipped}")
     return 0
 
 def cmd_span(new_span):

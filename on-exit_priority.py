@@ -61,16 +61,20 @@ def get_lowest_priority():
     return None
 
 def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression"""
+    """Build context filter expression using pri.after"""
     min_pri = int(min_priority)
     max_pri = min(min_pri + int(span) - 1, 6)
     
-    # Build priority filter
-    pri_filters = [f"priority:{p}" for p in range(min_pri, max_pri + 1)]
-    pri_expr = " or ".join(pri_filters)
+    # Use pri.after:N to show priorities below N
+    # pri.after:3 shows pri:1 and pri:2
+    # So to show min_pri to max_pri, we use pri.after:(max_pri+1)
+    if max_pri < 6:
+        pri_expr = f"pri.after:{max_pri + 1}"
+    else:
+        # If max is 6, just show all priorities
+        pri_expr = "pri.any:"
     
     # Add due/scheduled with user-specified time formats
-    # User can specify: 2d, 1w, 3m, etc.
     due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
     sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
     

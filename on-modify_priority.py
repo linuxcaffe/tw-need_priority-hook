@@ -44,12 +44,17 @@ def get_config_value(key, default=None):
         pass
     return default
 
-def get_lowest_priority(exclude_uuid=None):
+def get_lowest_priority_with_change(exclude_uuid=None, new_priority=None):
     """
     Find the lowest priority level with pending tasks
-    exclude_uuid: UUID of task to exclude (being deleted/completed)
+    Takes into account a task that's changing priority (not yet in DB)
+    
+    exclude_uuid: UUID of task being modified (still at old priority in DB)
+    new_priority: The new priority level this task will have
     """
     try:
+        log(f"get_lowest_priority_with_change: exclude_uuid={exclude_uuid}, new_priority={new_priority}")
+        
         for level in ['1', '2', '3', '4', '5', '6']:
             result = subprocess.run(
                 ['task', f'priority:{level}', 'status:pending', 'count'],
@@ -59,6 +64,56 @@ def get_lowest_priority(exclude_uuid=None):
             count = 0
             if result.returncode == 0:
                 count = int(result.stdout.strip() or 0)
+            
+            log(f"  Priority {level}: {count} tasks (DB)")
+            
+            # If we're excluding a task at this level, decrement count
+            if exclude_uuid and count > 0:
+                check_result = subprocess.run(
+                    ['task', f'uuid:{exclude_uuid}', f'priority:{level}', 'count'],
+                    capture_output=True,
+                    text=True
+                )
+                if check_result.returncode == 0:
+                    exclude_count = int(check_result.stdout.strip() or 0)
+                    if exclude_count > 0:
+                        log(f"    Excluding {exclude_count} task(s) at level {level} (old priority)")
+                        count -= exclude_count
+            
+            # If this is the new priority level, add 1 for the task being moved here
+            if new_priority and level == new_priority:
+                log(f"    Adding 1 task at level {level} (new priority)")
+                count += 1
+            
+            log(f"  Priority {level}: {count} tasks (adjusted)")
+            
+            if count > 0:
+                log(f"  Returning lowest priority: {level}")
+                return level
+        
+        log("  No tasks found, returning None")
+    except Exception as e:
+        log(f"Error getting lowest priority: {e}")
+    return None
+
+def get_lowest_priority(exclude_uuid=None):
+    """
+    Find the lowest priority level with pending tasks
+    exclude_uuid: UUID of task to exclude (being deleted/completed)
+    """
+    try:
+        log(f"get_lowest_priority called, exclude_uuid={exclude_uuid}")
+        for level in ['1', '2', '3', '4', '5', '6']:
+            result = subprocess.run(
+                ['task', f'priority:{level}', 'status:pending', 'count'],
+                capture_output=True,
+                text=True
+            )
+            count = 0
+            if result.returncode == 0:
+                count = int(result.stdout.strip() or 0)
+            
+            log(f"  Priority {level}: {count} tasks")
             
             # If we're excluding a task at this level, decrement count
             if exclude_uuid and count > 0:
@@ -70,37 +125,52 @@ def get_lowest_priority(exclude_uuid=None):
                 )
                 if check_result.returncode == 0:
                     exclude_count = int(check_result.stdout.strip() or 0)
+                    if exclude_count > 0:
+                        log(f"    Excluding {exclude_count} task(s) at level {level}")
                     count -= exclude_count
             
             if count > 0:
+                log(f"  Returning lowest priority: {level}")
                 return level
+        
+        log("  No tasks found, returning None")
     except Exception as e:
         log(f"Error getting lowest priority: {e}")
     return None
 
 def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression"""
+    """Build context filter expression using pri.after"""
     min_pri = int(min_priority)
     max_pri = min(min_pri + int(span) - 1, 6)
     
-    # Build priority filter
-    pri_filters = [f"priority:{p}" for p in range(min_pri, max_pri + 1)]
-    pri_expr = " or ".join(pri_filters)
+    # Use pri.after:N to show priorities below N
+    # pri.after:3 shows pri:1 and pri:2
+    # So to show min_pri to max_pri, we use pri.after:(max_pri+1)
+    if max_pri < 6:
+        pri_expr = f"pri.after:{max_pri + 1}"
+    else:
+        # If max is 6, just show all priorities
+        pri_expr = "pri.any:"
     
     # Add due/scheduled with user-specified time formats
-    # User can specify: 2d, 1w, 3m, etc.
     due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
     sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
     
     return f"{pri_expr} or {due_expr} or {sched_expr}"
 
-def update_context_in_config(exclude_uuid=None):
+def update_context_in_config(exclude_uuid=None, new_priority=None):
     """
     Update context.needs.read in need.rc based on current lowest priority
-    exclude_uuid: UUID of task to exclude (being deleted/completed)
+    exclude_uuid: UUID of task to exclude (being deleted/completed/moved)
+    new_priority: New priority level for the excluded task (if being moved)
     """
     try:
-        lowest = get_lowest_priority(exclude_uuid)
+        # If we have both exclude and new_priority, use the specialized function
+        if exclude_uuid and new_priority:
+            lowest = get_lowest_priority_with_change(exclude_uuid, new_priority)
+        else:
+            lowest = get_lowest_priority(exclude_uuid)
+        
         if not lowest:
             log("No pending tasks, clearing context filter")
             filter_expr = ""
@@ -109,7 +179,7 @@ def update_context_in_config(exclude_uuid=None):
             lookahead = get_config_value('priority.lookahead', '2d')
             lookback = get_config_value('priority.lookback', '1w')
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
-            log(f"Lowest priority (excluding {exclude_uuid}): {lowest}, filter: {filter_expr}")
+            log(f"Lowest priority (excluding {exclude_uuid}, new={new_priority}): {lowest}, filter: {filter_expr}")
         
         # Update need.rc
         lines = []
@@ -147,13 +217,19 @@ def main():
         
         desc = modified.get('description', 'NO DESC')[:50]
         
-        # Check if task is being deleted
+        # Check if task is being deleted or completed
         is_deletion = modified.get('status') == 'deleted'
         is_completion = modified.get('status') == 'completed'
         
+        # Check if priority changed
+        old_priority = original.get('priority', '')
+        new_priority = modified.get('priority', '')
+        priority_changed = old_priority != new_priority
+        
         log(f"=== ON-MODIFY: {desc} ===")
         log(f"Original status: {original.get('status')}, Modified status: {modified.get('status')}")
-        log(f"Is deletion: {is_deletion}, Is completion: {is_completion}")
+        log(f"Original priority: {old_priority}, Modified priority: {new_priority}")
+        log(f"Is deletion: {is_deletion}, Is completion: {is_completion}, Priority changed: {priority_changed}")
         
         # Check if priority was removed
         if 'priority' not in modified or not modified['priority']:
@@ -171,13 +247,24 @@ def main():
         print(json.dumps(modified))
         
         # Update context filter in background
-        # For deletions/completions, exclude this task from the count
+        # CRITICAL: At this point, the database still has the OLD priority!
+        # The change hasn't been committed yet. We need to account for this.
+        
         if is_deletion or is_completion:
             log(f"Task {'deleted' if is_deletion else 'completed'}, updating context (excluding UUID)")
-            update_context_in_config(modified.get('uuid'))
+            # Task is leaving - exclude it from counts
+            update_context_in_config(modified.get('uuid'), None)
+        elif priority_changed and old_priority in VALID_PRIORITIES and new_priority in VALID_PRIORITIES:
+            # Priority changed - database still shows old priority
+            # We simulate: remove from old_priority, add to new_priority
+            log(f"Priority changed from {old_priority} to {new_priority}")
+            log(f"Database still shows task at pri:{old_priority}")
+            log(f"Simulating move: exclude from {old_priority}, add to {new_priority}")
+            # Pass both UUID (to exclude from old level) and new priority (to add to new level)
+            update_context_in_config(modified.get('uuid'), new_priority)
         else:
-            log(f"Regular modification, updating context")
-            update_context_in_config()
+            log(f"Regular modification (no priority change), updating context")
+            update_context_in_config(None, None)
         
         return 0
         

@@ -1,24 +1,23 @@
 CHANGES for tw-priority-hook
 =============================
 
-v0.1.0 - 2026-01-17
+v0.3.1 - 2026-01-18
 -------------------
-Initial implementation:
-- Created directory structure matching recurrence project
-- need.rc with UDA definition and auto-assignment rules
-- need.rc initializes context.need.read with default filter
-- Command alias: task need → runs need.py report
-- on-add_priority.py hook for automatic priority assignment
-- on-modify_priority.py hook to enforce priority requirement
-- on-exit_priority.py hook to update context on completion/deletion
-- All hooks automatically maintain context.need.read in need.rc
-- Context filter includes lookback constraint to exclude old overdue tasks
-- need.py companion script for status report and span adjustment
-- Uses native 'task context need' and 'task context none' commands
-- Migration script (migrate_priority.py) to convert H/M/L to 1-6 scale
+Improvements:
+- nn review: Press <enter> to skip task (leave priority unchanged)
+- nn review: Clear screen and show pyramid between each task
+- on-modify: Detect priority changes and trigger context update
+- on-modify: Added detailed logging to debug context update issues
 
-CHANGES for tw-priority-hook
-=============================
+v0.3.0 - 2026-01-18
+-------------------
+New features:
+- Renamed need.py to nn.py (Needs Navigator) to avoid confusion with 'needs' context
+- Added 'nn review' command for interactive priority assignment
+  - Shows pyramid, then presents each task one-by-one
+  - Review order: H/M/L tasks, no-priority tasks, then numeric (1-6)
+  - Press 1-6 to assign priority, 'q' to quit
+- Updated alias from 'task needs' to 'task nn'
 
 v0.2.0 - 2026-01-18
 -------------------
@@ -53,6 +52,96 @@ Initial implementation:
 
 CHANGES for tw-priority-hook
 =============================
+
+v0.3.2 - 2026-01-18
+-------------------
+Critical fix:
+- Changed context filter to use pri.after:N instead of OR'd priorities
+  - pri.after:3 shows pri:1 and pri:2 (cleaner syntax)
+  - Eliminates complex OR expressions
+- Fixed priority change detection in on-modify
+  - When changing pri:1→pri:2, correctly excludes task from old priority level
+  - Database still shows old priority when hook runs, now handled correctly
+
+v0.3.1 - 2026-01-18
+-------------------
+Improvements:
+- nn review: Press <enter> to skip task (leave priority unchanged)
+- nn review: Clear screen and show pyramid between each task
+- on-modify: Detect priority changes and trigger context update
+- on-modify: Added detailed logging to debug context update issues
+
+v0.3.0 - 2026-01-18
+-------------------
+New features:
+- Renamed need.py to nn.py (Needs Navigator) to avoid confusion with 'needs' context
+- Added 'nn review' command for interactive priority assignment
+  - Shows pyramid, then presents each task one-by-one
+  - Review order: H/M/L tasks, no-priority tasks, then numeric (1-6)
+  - Press 1-6 to assign priority, 'q' to quit
+- Updated alias from 'task needs' to 'task nn'
+
+v0.2.0 - 2026-01-18
+-------------------
+Bug fixes:
+- Fixed context not updating after task deletion
+- on-modify now excludes the task being deleted/completed when calculating lowest priority
+- Fixed task counts in need.py to ignore active context (shows all pending tasks)
+- Fixed layout issues in need.py report (clean fixed-width columns)
+- Added detailed logging to on-modify with status detection
+- Added 'need update' command to manually recalculate context
+
+Changes:
+- Time format now user-specified (e.g., 2d, 1w, 3m) instead of converting
+- Context renamed from 'need' to 'needs' (alias is 'need')
+- Clarified that task delete triggers on-modify, not on-exit
+
+v0.1.0 - 2026-01-17
+-------------------
+Initial implementation:
+- Created directory structure matching recurrence project
+- need.rc with UDA definition and auto-assignment rules
+- need.rc initializes context.need.read with default filter
+- Command alias: task need → runs need.py report
+- on-add_priority.py hook for automatic priority assignment
+- on-modify_priority.py hook to enforce priority requirement
+- on-exit_priority.py hook to update context on completion/deletion
+- All hooks automatically maintain context.need.read in need.rc
+- Context filter includes lookback constraint to exclude old overdue tasks
+- need.py companion script for status report and span adjustment
+- Uses native 'task context need' and 'task context none' commands
+- Migration script (migrate_priority.py) to convert H/M/L to 1-6 scale
+
+
+CHANGES for tw-priority-hook
+=============================
+
+v0.3.3 - 2026-01-18
+-------------------
+Improvements:
+- Fixed priority upgrade detection (pri:2→pri:1 now updates context correctly)
+  - New function get_lowest_priority_with_change() simulates task movement
+  - Subtracts 1 from old priority level, adds 1 to new priority level
+- Made pyramid display pyramidal again with proper indentation
+- Added detailed logging for priority change simulation
+
+v0.3.2 - 2026-01-18
+-------------------
+Critical fix:
+- Changed context filter to use pri.after:N instead of OR'd priorities
+  - pri.after:3 shows pri:1 and pri:2 (cleaner syntax)
+  - Eliminates complex OR expressions
+- Fixed priority change detection in on-modify
+  - When changing pri:1→pri:2, correctly excludes task from old priority level
+  - Database still shows old priority when hook runs, now handled correctly
+
+v0.3.1 - 2026-01-18
+-------------------
+Improvements:
+- nn review: Press <enter> to skip task (leave priority unchanged)
+- nn review: Clear screen and show pyramid between each task
+- on-modify: Detect priority changes and trigger context update
+- on-modify: Added detailed logging to debug context update issues
 
 v0.3.0 - 2026-01-18
 -------------------

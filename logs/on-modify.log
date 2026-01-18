@@ -81,3 +81,234 @@
 [2026-01-18 17:07:03] Task deleted, updating context (excluding UUID)
 [2026-01-18 17:07:04] Lowest priority (excluding 7932773b-5191-4dd8-9058-5915fb8651d6): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
 [2026-01-18 17:07:04] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:27:48] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 17:27:48] Original status: pending, Modified status: pending
+[2026-01-18 17:27:48] Is deletion: False, Is completion: False
+[2026-01-18 17:27:48] Regular modification, updating context
+[2026-01-18 17:27:48] Lowest priority (excluding None): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:27:48] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:04] === ON-MODIFY: develop syngas.ca ===
+[2026-01-18 17:28:04] Original status: pending, Modified status: pending
+[2026-01-18 17:28:04] Is deletion: False, Is completion: False
+[2026-01-18 17:28:04] Regular modification, updating context
+[2026-01-18 17:28:04] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:04] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:08] === ON-MODIFY: call Ruth and Sky ===
+[2026-01-18 17:28:08] Original status: pending, Modified status: pending
+[2026-01-18 17:28:08] Is deletion: False, Is completion: False
+[2026-01-18 17:28:08] Regular modification, updating context
+[2026-01-18 17:28:08] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:08] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:21] === ON-MODIFY: call Jorber ===
+[2026-01-18 17:28:21] Original status: pending, Modified status: pending
+[2026-01-18 17:28:21] Is deletion: False, Is completion: False
+[2026-01-18 17:28:21] Regular modification, updating context
+[2026-01-18 17:28:21] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:21] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:32] === ON-MODIFY: call Pat McTaggart ===
+[2026-01-18 17:28:32] Original status: pending, Modified status: pending
+[2026-01-18 17:28:32] Is deletion: False, Is completion: False
+[2026-01-18 17:28:32] Regular modification, updating context
+[2026-01-18 17:28:32] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:32] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:37] === ON-MODIFY: install hledger ===
+[2026-01-18 17:28:37] Original status: pending, Modified status: pending
+[2026-01-18 17:28:37] Is deletion: False, Is completion: False
+[2026-01-18 17:28:37] Regular modification, updating context
+[2026-01-18 17:28:37] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:37] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:47] === ON-MODIFY: install neovim and plugins ===
+[2026-01-18 17:28:47] Original status: pending, Modified status: pending
+[2026-01-18 17:28:47] Is deletion: False, Is completion: False
+[2026-01-18 17:28:47] Regular modification, updating context
+[2026-01-18 17:28:47] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:47] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:52] === ON-MODIFY: sign up for linode ===
+[2026-01-18 17:28:52] Original status: pending, Modified status: pending
+[2026-01-18 17:28:52] Is deletion: False, Is completion: False
+[2026-01-18 17:28:52] Regular modification, updating context
+[2026-01-18 17:28:52] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:52] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:55] === ON-MODIFY: call Mark Kett ===
+[2026-01-18 17:28:55] Original status: pending, Modified status: pending
+[2026-01-18 17:28:55] Is deletion: False, Is completion: False
+[2026-01-18 17:28:55] Regular modification, updating context
+[2026-01-18 17:28:55] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:28:55] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:01] === ON-MODIFY: improve sync status visual feedback ===
+[2026-01-18 17:29:01] Original status: pending, Modified status: pending
+[2026-01-18 17:29:01] Is deletion: False, Is completion: False
+[2026-01-18 17:29:01] Regular modification, updating context
+[2026-01-18 17:29:01] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:01] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:04] === ON-MODIFY: develop rotato.ca ===
+[2026-01-18 17:29:04] Original status: pending, Modified status: pending
+[2026-01-18 17:29:04] Is deletion: False, Is completion: False
+[2026-01-18 17:29:04] Regular modification, updating context
+[2026-01-18 17:29:04] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:04] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:09] === ON-MODIFY: install recur-enhanced hooks ===
+[2026-01-18 17:29:09] Original status: pending, Modified status: pending
+[2026-01-18 17:29:09] Is deletion: False, Is completion: False
+[2026-01-18 17:29:09] Regular modification, updating context
+[2026-01-18 17:29:09] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:09] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:12] === ON-MODIFY: register linuxcaffe.ca ===
+[2026-01-18 17:29:12] Original status: pending, Modified status: pending
+[2026-01-18 17:29:12] Is deletion: False, Is completion: False
+[2026-01-18 17:29:12] Regular modification, updating context
+[2026-01-18 17:29:12] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:12] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:15] === ON-MODIFY: install clog ===
+[2026-01-18 17:29:15] Original status: pending, Modified status: pending
+[2026-01-18 17:29:15] Is deletion: False, Is completion: False
+[2026-01-18 17:29:15] Regular modification, updating context
+[2026-01-18 17:29:15] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:15] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:18] === ON-MODIFY: install t.sh ===
+[2026-01-18 17:29:18] Original status: pending, Modified status: pending
+[2026-01-18 17:29:18] Is deletion: False, Is completion: False
+[2026-01-18 17:29:18] Regular modification, updating context
+[2026-01-18 17:29:18] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:18] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:20] === ON-MODIFY: hookify script ===
+[2026-01-18 17:29:20] Original status: pending, Modified status: pending
+[2026-01-18 17:29:20] Is deletion: False, Is completion: False
+[2026-01-18 17:29:20] Regular modification, updating context
+[2026-01-18 17:29:20] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:20] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:36] === ON-MODIFY: improvements ===
+[2026-01-18 17:29:36] Original status: pending, Modified status: pending
+[2026-01-18 17:29:36] Is deletion: False, Is completion: False
+[2026-01-18 17:29:36] Regular modification, updating context
+[2026-01-18 17:29:36] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:36] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:39] === ON-MODIFY: exclude task info from nicedates ===
+[2026-01-18 17:29:39] Original status: pending, Modified status: pending
+[2026-01-18 17:29:39] Is deletion: False, Is completion: False
+[2026-01-18 17:29:39] Regular modification, updating context
+[2026-01-18 17:29:39] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:39] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:44] === ON-MODIFY: enable tag completion ===
+[2026-01-18 17:29:44] Original status: pending, Modified status: pending
+[2026-01-18 17:29:44] Is deletion: False, Is completion: False
+[2026-01-18 17:29:44] Regular modification, updating context
+[2026-01-18 17:29:45] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:45] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:47] === ON-MODIFY: fix test suite ===
+[2026-01-18 17:29:47] Original status: pending, Modified status: pending
+[2026-01-18 17:29:47] Is deletion: False, Is completion: False
+[2026-01-18 17:29:47] Regular modification, updating context
+[2026-01-18 17:29:47] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:29:47] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:30:42] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 17:30:42] Original status: pending, Modified status: pending
+[2026-01-18 17:30:42] Is deletion: False, Is completion: False
+[2026-01-18 17:30:42] Regular modification, updating context
+[2026-01-18 17:30:42] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:30:42] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:42:45] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 17:42:45] Original status: pending, Modified status: pending
+[2026-01-18 17:42:45] Original priority: 2, Modified priority: 1
+[2026-01-18 17:42:45] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 17:42:45] Priority changed from 2 to 1
+[2026-01-18 17:42:45] Checking if old priority level needs context update
+[2026-01-18 17:42:45] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 17:42:45]   Priority 1: 0 tasks
+[2026-01-18 17:42:45]   Priority 2: 9 tasks
+[2026-01-18 17:42:45]   Returning lowest priority: 2
+[2026-01-18 17:42:45] Lowest priority (excluding None): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:42:45] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:43:27] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 17:43:27] Original status: pending, Modified status: pending
+[2026-01-18 17:43:27] Original priority: 1, Modified priority: 2
+[2026-01-18 17:43:27] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 17:43:27] Priority changed from 1 to 2
+[2026-01-18 17:43:27] Checking if old priority level needs context update
+[2026-01-18 17:43:27] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 17:43:27]   Priority 1: 1 tasks
+[2026-01-18 17:43:27]   Returning lowest priority: 1
+[2026-01-18 17:43:27] Lowest priority (excluding None): 1, filter: priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:43:27] Updated context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:43:42] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 17:43:42] Original status: pending, Modified status: pending
+[2026-01-18 17:43:42] Original priority: 2, Modified priority: 1
+[2026-01-18 17:43:42] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 17:43:42] Priority changed from 2 to 1
+[2026-01-18 17:43:42] Checking if old priority level needs context update
+[2026-01-18 17:43:42] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 17:43:42]   Priority 1: 0 tasks
+[2026-01-18 17:43:42]   Priority 2: 9 tasks
+[2026-01-18 17:43:42]   Returning lowest priority: 2
+[2026-01-18 17:43:42] Lowest priority (excluding None): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:43:42] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:03:55] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 18:03:55] Original status: pending, Modified status: pending
+[2026-01-18 18:03:55] Original priority: 1, Modified priority: 2
+[2026-01-18 18:03:55] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:03:55] Priority changed from 1 to 2
+[2026-01-18 18:03:55] Simulating priority change for context update
+[2026-01-18 18:03:55] get_lowest_priority called, exclude_uuid=86b7aaf9-93c4-441a-8f98-4e356d09cbb6
+[2026-01-18 18:03:55]   Priority 1: 1 tasks
+[2026-01-18 18:03:55]     Excluding 1 task(s) at level 1
+[2026-01-18 18:03:55]   Priority 2: 8 tasks
+[2026-01-18 18:03:56]   Returning lowest priority: 2
+[2026-01-18 18:03:56] Lowest priority (excluding 86b7aaf9-93c4-441a-8f98-4e356d09cbb6): 2, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:03:56] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:05:03] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 18:05:03] Original status: pending, Modified status: pending
+[2026-01-18 18:05:03] Original priority: 2, Modified priority: 1
+[2026-01-18 18:05:03] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:05:03] Priority changed from 2 to 1
+[2026-01-18 18:05:03] Simulating priority change for context update
+[2026-01-18 18:05:03] get_lowest_priority called, exclude_uuid=86b7aaf9-93c4-441a-8f98-4e356d09cbb6
+[2026-01-18 18:05:03]   Priority 1: 0 tasks
+[2026-01-18 18:05:03]   Priority 2: 9 tasks
+[2026-01-18 18:05:03]     Excluding 1 task(s) at level 2
+[2026-01-18 18:05:03]   Returning lowest priority: 2
+[2026-01-18 18:05:03] Lowest priority (excluding 86b7aaf9-93c4-441a-8f98-4e356d09cbb6): 2, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:05:03] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:05:45] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 18:05:45] Original status: pending, Modified status: pending
+[2026-01-18 18:05:45] Original priority: 1, Modified priority: 2
+[2026-01-18 18:05:45] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:05:45] Priority changed from 1 to 2
+[2026-01-18 18:05:45] Simulating priority change for context update
+[2026-01-18 18:05:45] get_lowest_priority called, exclude_uuid=86b7aaf9-93c4-441a-8f98-4e356d09cbb6
+[2026-01-18 18:05:45]   Priority 1: 1 tasks
+[2026-01-18 18:05:45]     Excluding 1 task(s) at level 1
+[2026-01-18 18:05:46]   Priority 2: 8 tasks
+[2026-01-18 18:05:46]   Returning lowest priority: 2
+[2026-01-18 18:05:46] Lowest priority (excluding 86b7aaf9-93c4-441a-8f98-4e356d09cbb6): 2, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:05:46] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:14:54] === ON-MODIFY: testing needs ===
+[2026-01-18 18:14:54] Original status: pending, Modified status: pending
+[2026-01-18 18:14:54] Original priority: 1, Modified priority: 2
+[2026-01-18 18:14:54] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:14:54] Priority changed from 1 to 2
+[2026-01-18 18:14:54] Database still shows task at pri:1
+[2026-01-18 18:14:54] Simulating move: exclude from 1, add to 2
+[2026-01-18 18:14:54] get_lowest_priority_with_change: exclude_uuid=34fde638-f82a-4b5b-a5c4-6a70f773968b, new_priority=2
+[2026-01-18 18:14:55]   Priority 1: 1 tasks (DB)
+[2026-01-18 18:14:55]     Excluding 1 task(s) at level 1 (old priority)
+[2026-01-18 18:14:55]   Priority 1: 0 tasks (adjusted)
+[2026-01-18 18:14:55]   Priority 2: 9 tasks (DB)
+[2026-01-18 18:14:55]     Adding 1 task at level 2 (new priority)
+[2026-01-18 18:14:55]   Priority 2: 10 tasks (adjusted)
+[2026-01-18 18:14:55]   Returning lowest priority: 2
+[2026-01-18 18:14:55] Lowest priority (excluding 34fde638-f82a-4b5b-a5c4-6a70f773968b, new=2): 2, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:14:55] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:15:14] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 18:15:14] Original status: pending, Modified status: pending
+[2026-01-18 18:15:14] Original priority: 2, Modified priority: 1
+[2026-01-18 18:15:14] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:15:14] Priority changed from 2 to 1
+[2026-01-18 18:15:14] Database still shows task at pri:2
+[2026-01-18 18:15:14] Simulating move: exclude from 2, add to 1
+[2026-01-18 18:15:14] get_lowest_priority_with_change: exclude_uuid=86b7aaf9-93c4-441a-8f98-4e356d09cbb6, new_priority=1
+[2026-01-18 18:15:14]   Priority 1: 0 tasks (DB)
+[2026-01-18 18:15:14]     Adding 1 task at level 1 (new priority)
+[2026-01-18 18:15:14]   Priority 1: 1 tasks (adjusted)
+[2026-01-18 18:15:14]   Returning lowest priority: 1
+[2026-01-18 18:15:14] Lowest priority (excluding 86b7aaf9-93c4-441a-8f98-4e356d09cbb6, new=1): 1, filter: pri.after:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:15:14] Updated context.needs.read=pri.after:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
