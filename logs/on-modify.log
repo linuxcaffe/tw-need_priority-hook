@@ -39,3 +39,45 @@
 [2026-01-18 17:00:21] Task deleted, updating context (excluding UUID)
 [2026-01-18 17:00:21] Lowest priority (excluding e2b68160-4556-41c2-9dfa-6cfe0a168aa7): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
 [2026-01-18 17:00:21] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:02] === ON-MODIFY: test pri hook ===
+[2026-01-18 17:07:02] Original status: pending, Modified status: deleted
+[2026-01-18 17:07:02] Is deletion: True, Is completion: False
+[2026-01-18 17:07:02] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:07:02] Lowest priority (excluding 3bba79ca-9347-4445-818d-f7062004f581): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:02] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:02] === ON-MODIFY: testing chain start ===
+[2026-01-18 17:07:02] Original status: completed, Modified status: deleted
+[2026-01-18 17:07:02] Is deletion: True, Is completion: False
+[2026-01-18 17:07:02] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:07:02] Lowest priority (excluding 005dfc0f-0c0a-40a1-944e-76d7a3e206c9): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:02] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:02] === ON-MODIFY: testing chain start ===
+[2026-01-18 17:07:02] Original status: completed, Modified status: deleted
+[2026-01-18 17:07:02] Is deletion: True, Is completion: False
+[2026-01-18 17:07:02] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:07:02] Lowest priority (excluding b5ca2cf1-9328-44ef-bbb2-36da49ce3bc9): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:02] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:03] === ON-MODIFY: testing chain start ===
+[2026-01-18 17:07:03] Original status: completed, Modified status: deleted
+[2026-01-18 17:07:03] Is deletion: True, Is completion: False
+[2026-01-18 17:07:03] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:07:03] Lowest priority (excluding 5d01c7a6-49bd-4244-a338-9a5e7816b1bf): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:03] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:03] === ON-MODIFY: testing chain start ===
+[2026-01-18 17:07:03] Original status: completed, Modified status: deleted
+[2026-01-18 17:07:03] Is deletion: True, Is completion: False
+[2026-01-18 17:07:03] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:07:03] Lowest priority (excluding b183d31a-caad-4529-9d22-8657685cff2e): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:03] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:03] === ON-MODIFY: testing chain start ===
+[2026-01-18 17:07:03] Original status: completed, Modified status: deleted
+[2026-01-18 17:07:03] Is deletion: True, Is completion: False
+[2026-01-18 17:07:03] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:07:03] Lowest priority (excluding 2a2b980c-b987-4669-82e6-b079c12935cb): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:03] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:03] === ON-MODIFY: testing chain start ===
+[2026-01-18 17:07:03] Original status: completed, Modified status: deleted
+[2026-01-18 17:07:03] Is deletion: True, Is completion: False
+[2026-01-18 17:07:03] Task deleted, updating context (excluding UUID)
+[2026-01-18 17:07:04] Lowest priority (excluding 7932773b-5191-4dd8-9058-5915fb8651d6): 2, filter: priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 17:07:04] Updated context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )

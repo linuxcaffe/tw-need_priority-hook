@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 """
-need.py - Priority hierarchy report for Taskwarrior
+nn.py - Priority hierarchy management for Taskwarrior (Needs Navigator)
 Part of tw-priority-hook project
 
 The hooks automatically maintain context.needs.read in need.rc.
-This script shows the current state and adjusts configuration.
+This script shows the current state, adjusts configuration, and helps review/assign priorities.
 
 Usage:
-    need              - Show priority report
-    need span <N>     - Set priority span (how many levels to show)
-    need update       - Manually recalculate and update context filter
+    nn                - Show priority report
+    nn span <N>       - Set priority span (how many levels to show)
+    nn update         - Manually recalculate and update context filter
+    nn review         - Review and assign priorities to tasks
 """
 
 import sys
 import os
 import subprocess
+import json
 
 # Configuration
 HOOK_DIR = os.path.expanduser("~/.task/hooks/priority")
@@ -227,6 +229,158 @@ def cmd_span(new_span):
         print(f"Invalid span value: {new_span}", file=sys.stderr)
         return 1
 
+def get_review_tasks():
+    """
+    Get tasks for review in priority order:
+    1. H/M/L priorities (old format)
+    2. Tasks with no priority
+    3. Tasks with numeric priorities (1-6, lowest first)
+    """
+    tasks = []
+    
+    try:
+        # Get all pending tasks as JSON
+        result = subprocess.run(
+            ['task', 'rc.context=none', 'status:pending', 'export'],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode != 0:
+            return []
+        
+        all_tasks = json.loads(result.stdout)
+        
+        # Separate into categories
+        hml_tasks = []
+        no_priority = []
+        numeric_tasks = {str(i): [] for i in range(1, 7)}
+        
+        for task in all_tasks:
+            pri = task.get('priority', '')
+            
+            if pri in ['H', 'M', 'L']:
+                hml_tasks.append(task)
+            elif not pri:
+                no_priority.append(task)
+            elif pri in ['1', '2', '3', '4', '5', '6']:
+                numeric_tasks[pri].append(task)
+        
+        # Combine in order: H/M/L, no priority, then 1-6
+        tasks.extend(hml_tasks)
+        tasks.extend(no_priority)
+        for level in ['1', '2', '3', '4', '5', '6']:
+            tasks.extend(numeric_tasks[level])
+        
+        return tasks
+        
+    except Exception as e:
+        print(f"Error getting tasks for review: {e}", file=sys.stderr)
+        return []
+
+def display_task_detail(task):
+    """Display task with all relevant attributes"""
+    print("\n" + "─" * 80)
+    print(f"ID: {task.get('id', 'N/A')}")
+    print(f"Description: {task.get('description', 'N/A')}")
+    
+    # Show current priority
+    pri = task.get('priority', '(none)')
+    if pri in ['H', 'M', 'L']:
+        print(f"Priority: {pri} (OLD FORMAT - needs assignment)")
+    else:
+        print(f"Priority: {pri}")
+    
+    # Show other useful attributes
+    if 'project' in task:
+        print(f"Project: {task['project']}")
+    if 'tags' in task and task['tags']:
+        print(f"Tags: {', '.join(['+' + t for t in task['tags']])}")
+    if 'due' in task:
+        print(f"Due: {task['due']}")
+    if 'scheduled' in task:
+        print(f"Scheduled: {task['scheduled']}")
+    if 'urgency' in task:
+        print(f"Urgency: {task['urgency']:.2f}")
+    
+    print("─" * 80)
+
+def cmd_review():
+    """Interactive review and assignment of priorities"""
+    tasks = get_review_tasks()
+    
+    if not tasks:
+        print("No tasks need priority review!")
+        return 0
+    
+    print(f"\nFound {len(tasks)} tasks to review")
+    print("=" * 80)
+    
+    # Show priority pyramid first
+    show_report()
+    
+    print("\nReview Mode")
+    print("Enter priority (1-6) or 'q' to quit")
+    print("=" * 80)
+    
+    reviewed = 0
+    updated = 0
+    
+    for task in tasks:
+        display_task_detail(task)
+        
+        # Prompt for priority
+        while True:
+            try:
+                response = input("\nAssign priority [1-6, q to quit]: ").strip().lower()
+                
+                if response == 'q':
+                    print(f"\nReviewed {reviewed} tasks, updated {updated}")
+                    return 0
+                
+                if response in ['1', '2', '3', '4', '5', '6']:
+                    # Update task priority
+                    uuid = task['uuid']
+                    result = subprocess.run(
+                        ['task', uuid, 'modify', f'priority:{response}'],
+                        capture_output=True,
+                        text=True
+                    )
+                    
+                    if result.returncode == 0:
+                        print(f"✓ Set priority to {response}")
+                        updated += 1
+                        reviewed += 1
+                        break
+                    else:
+                        print(f"✗ Error updating task: {result.stderr}")
+                        break
+                else:
+                    print("Invalid input. Enter 1-6 or 'q'")
+            
+            except (KeyboardInterrupt, EOFError):
+                print(f"\n\nReviewed {reviewed} tasks, updated {updated}")
+                return 0
+    
+    print(f"\nAll tasks reviewed! Updated {updated} tasks")
+    return 0
+
+def cmd_span(new_span):
+    """Set priority span value"""
+    try:
+        span = int(new_span)
+        if span < 1 or span > 6:
+            raise ValueError
+        
+        if set_config_value('priority.span', str(span)):
+            print(f"Priority span set to {span}")
+            print("Context filter will update automatically on next task change")
+            return 0
+        else:
+            return 1
+    except ValueError:
+        print(f"Invalid span value: {new_span}", file=sys.stderr)
+        return 1
+
 def main():
     """Main entry point"""
     args = sys.argv[1:]
@@ -239,11 +393,13 @@ def main():
     
     if cmd == 'span':
         if len(args) < 2:
-            print("Usage: need span <N>", file=sys.stderr)
+            print("Usage: nn span <N>", file=sys.stderr)
             return 1
         return cmd_span(args[1])
     elif cmd == 'update':
         return 0 if update_context() else 1
+    elif cmd == 'review':
+        return cmd_review()
     else:
         print(f"Unknown command: {cmd}", file=sys.stderr)
         print(__doc__)

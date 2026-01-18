@@ -52,7 +52,7 @@ Automatically assigns and filters tasks based on a 6-level priority hierarchy:
    ln -s ~/.task/hooks/priority/on-add_priority.py ~/.task/hooks/
    ln -s ~/.task/hooks/priority/on-modify_priority.py ~/.task/hooks/
    ln -s ~/.task/hooks/priority/on-exit_priority.py ~/.task/hooks/
-   ln -s ~/.task/hooks/priority/need.py ~/.task/scripts/need
+   ln -s ~/.task/hooks/priority/nn.py ~/.task/scripts/nn
    ```
 
 4. **Include configuration:**
@@ -66,7 +66,7 @@ Automatically assigns and filters tasks based on a 6-level priority hierarchy:
    - Auto-assignment rules
    - Urgency coefficients
    - Context definition (auto-maintained by hooks)
-   - Command alias: `task need` (runs the report script)
+   - Command alias: `task nn` (Needs Navigator)
 
 5. **Add scripts to PATH** (optional alternative to alias):
    ```bash
@@ -132,31 +132,35 @@ task context none
 
 ### Companion Script Commands
 
-The `need.rc` file includes an alias, so you can use:
+The `need.rc` file includes an alias for `nn` (Needs Navigator):
 
 ```bash
-# Using the alias (after including need.rc in .taskrc)
-task need
+# Show priority report
+task nn
+
+# Review and assign priorities to tasks
+task nn review
 
 # Adjust span (context auto-updates on next task change)
-task need span 3
+task nn span 3
 
 # Manually force context recalculation (if hooks missed an update)
-task need update
+task nn update
 ```
 
-Note: The alias passes arguments, so `task need span 3` and `task need update` work correctly.
+Note: The alias passes arguments, so all commands work correctly.
 
 The hooks handle all context management automatically. Just use `task context needs` / `task context none` to control activation.
 
 ## How Auto-Context Works
 
-The hooks automatically maintain `context.need.read` in need.rc:
+The hooks automatically maintain `context.needs.read` in need.rc:
 
 **Automatic updates:**
 - When you add a task → on-add recalculates and updates filter
 - When you modify a task → on-modify recalculates and updates filter  
-- When you complete/delete a task → on-exit recalculates and updates filter
+- When you delete a task → on-modify detects deletion and updates filter
+- When you complete a task (`task done`) → on-exit updates filter
 
 **The filter is always current** - just activate when you want it:
 
@@ -178,7 +182,7 @@ With `priority.span=2`, `priority.lookahead=2d`, and `priority.lookback=1w`:
 
 3. **Check current state:**
    ```bash
-   task need  # Shows pyramid + current filter
+   task nn  # Shows pyramid + current filter
    ```
 
 ### Example Workflow
@@ -191,8 +195,11 @@ task add Get prescription refilled +meds
 # Add task with bill tag - auto-assigned pri:2  
 task add Pay electricity bill +bills
 
-# Check current status (using alias)
-task needs
+# Check current status
+task nn
+
+# Review and assign priorities to tasks that need them
+task nn review
 
 # Activate the context
 task context needs
@@ -208,7 +215,7 @@ task 1 done
 task list
 
 # Check what changed
-task needs
+task nn
 
 # Temporarily see everything
 task context none

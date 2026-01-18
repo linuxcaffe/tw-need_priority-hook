@@ -50,8 +50,8 @@ priority.lookahead=2d
 priority.lookback=1w
 
 # Context definition (auto-maintained by hooks)
-context.needs.read=priority:2 or priority:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+context.needs.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
 
-# Command alias for needs report
-# Use 'task needs' to run the report
-alias.need=exec sh -c '~/.task/hooks/priority/need.py'
+# Command alias for nn (Needs Navigator)
+# Use 'task nn' to run the report
+alias.nn=exec sh -c '~/.task/hooks/priority/nn.py'
