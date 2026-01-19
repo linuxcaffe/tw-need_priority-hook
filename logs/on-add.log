@@ -58,3 +58,11 @@
 [2026-01-18 18:20:42] Priority already set to 4
 [2026-01-18 18:20:42] Lowest priority: 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
 [2026-01-18 18:20:42] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:51:53] Processing task: enter jrnl and hledger
+[2026-01-18 23:51:53] Priority already set to 4
+[2026-01-18 23:51:53] Lowest priority: 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:51:53] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:54:45] Processing task: enter jrnl and hledger
+[2026-01-18 23:54:45] Priority already set to 2
+[2026-01-18 23:54:45] Lowest priority: 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:54:45] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )

@@ -8,11 +8,11 @@ uda.priority.values=1,2,3,4,5,6
 uda.priority.default=4
 
 # Urgency coefficients (higher priority = more urgent)
-urgency.uda.priority.1.coefficient=10.0
-urgency.uda.priority.2.coefficient=8.0
-urgency.uda.priority.3.coefficient=6.0
-urgency.uda.priority.4.coefficient=4.0
-urgency.uda.priority.5.coefficient=2.0
+urgency.uda.priority.1.coefficient=20.0
+urgency.uda.priority.2.coefficient=16.0
+urgency.uda.priority.3.coefficient=12.0
+urgency.uda.priority.4.coefficient=8.0
+urgency.uda.priority.5.coefficient=4.0
 urgency.uda.priority.6.coefficient=0.0
 
 # Auto-assignment rules
@@ -52,6 +52,7 @@ priority.lookback=1w
 # Context definition (auto-maintained by hooks)
 # Uses pri.after:N syntax where pri.after:3 shows pri:1 and pri:2
 context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+### include started
 
 # Command alias for nn (Needs Navigator)
 # Use 'task nn' to run the report

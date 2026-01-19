@@ -379,3 +379,267 @@
 [2026-01-18 18:29:49]   Returning lowest priority: 1
 [2026-01-18 18:29:49] Lowest priority (excluding 395d7338-1969-4a82-8bdf-c6a149c9f673, new=2): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
 [2026-01-18 18:29:49] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:07:40] === ON-MODIFY: Verisign more documents ===
+[2026-01-18 23:07:40] Original status: pending, Modified status: pending
+[2026-01-18 23:07:40] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:07:40] Priority changed: False
+[2026-01-18 23:07:40] Old in VALID: True, New in VALID: True
+[2026-01-18 23:07:40] Is deletion: False, Is completion: False
+[2026-01-18 23:07:40] Regular modification (no priority change), updating context
+[2026-01-18 23:07:40] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:07:40]   Priority 1: 1 tasks
+[2026-01-18 23:07:40]   Returning lowest priority: 1
+[2026-01-18 23:07:40] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:07:40] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:22:47] === ON-MODIFY: Verisign more documents ===
+[2026-01-18 23:22:47] Original status: pending, Modified status: pending
+[2026-01-18 23:22:47] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:22:47] Priority changed: False
+[2026-01-18 23:22:47] Old in VALID: True, New in VALID: True
+[2026-01-18 23:22:47] Is deletion: False, Is completion: False
+[2026-01-18 23:22:47] Regular modification (no priority change), updating context
+[2026-01-18 23:22:47] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:22:47]   Priority 1: 1 tasks
+[2026-01-18 23:22:47]   Returning lowest priority: 1
+[2026-01-18 23:22:47] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:22:47] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:23:13] === ON-MODIFY: Verisign more documents ===
+[2026-01-18 23:23:13] Original status: pending, Modified status: pending
+[2026-01-18 23:23:13] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:23:13] Priority changed: False
+[2026-01-18 23:23:13] Old in VALID: True, New in VALID: True
+[2026-01-18 23:23:13] Is deletion: False, Is completion: False
+[2026-01-18 23:23:13] Regular modification (no priority change), updating context
+[2026-01-18 23:23:13] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:23:14]   Priority 1: 1 tasks
+[2026-01-18 23:23:14]   Returning lowest priority: 1
+[2026-01-18 23:23:14] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:23:14] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] === ON-MODIFY: pay Sonnet insurance ===
+[2026-01-18 23:26:56] Original status: recurring, Modified status: recurring
+[2026-01-18 23:26:56] Original priority: 'H', Modified priority: '2'
+[2026-01-18 23:26:56] Priority changed: True
+[2026-01-18 23:26:56] Old in VALID: False, New in VALID: True
+[2026-01-18 23:26:56] Is deletion: False, Is completion: False
+[2026-01-18 23:26:56] Regular modification (no priority change), updating context
+[2026-01-18 23:26:56] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:26:56]   Priority 1: 1 tasks
+[2026-01-18 23:26:56]   Returning lowest priority: 1
+[2026-01-18 23:26:56] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] === ON-MODIFY: pay Sonnet insurance ===
+[2026-01-18 23:26:56] Original status: pending, Modified status: pending
+[2026-01-18 23:26:56] Original priority: 'H', Modified priority: '2'
+[2026-01-18 23:26:56] Priority changed: True
+[2026-01-18 23:26:56] Old in VALID: False, New in VALID: True
+[2026-01-18 23:26:56] Is deletion: False, Is completion: False
+[2026-01-18 23:26:56] Regular modification (no priority change), updating context
+[2026-01-18 23:26:56] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:26:56]   Priority 1: 1 tasks
+[2026-01-18 23:26:56]   Returning lowest priority: 1
+[2026-01-18 23:26:56] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] === ON-MODIFY: pay 1126 Self Storage ===
+[2026-01-18 23:26:56] Original status: recurring, Modified status: recurring
+[2026-01-18 23:26:56] Original priority: '', Modified priority: '2'
+[2026-01-18 23:26:56] Priority changed: True
+[2026-01-18 23:26:56] Old in VALID: False, New in VALID: True
+[2026-01-18 23:26:56] Is deletion: False, Is completion: False
+[2026-01-18 23:26:56] Regular modification (no priority change), updating context
+[2026-01-18 23:26:56] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:26:56]   Priority 1: 1 tasks
+[2026-01-18 23:26:56]   Returning lowest priority: 1
+[2026-01-18 23:26:56] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] === ON-MODIFY: pay 1126 Self Storage ===
+[2026-01-18 23:26:56] Original status: pending, Modified status: pending
+[2026-01-18 23:26:56] Original priority: '', Modified priority: '2'
+[2026-01-18 23:26:56] Priority changed: True
+[2026-01-18 23:26:56] Old in VALID: False, New in VALID: True
+[2026-01-18 23:26:56] Is deletion: False, Is completion: False
+[2026-01-18 23:26:56] Regular modification (no priority change), updating context
+[2026-01-18 23:26:56] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:26:56]   Priority 1: 1 tasks
+[2026-01-18 23:26:56]   Returning lowest priority: 1
+[2026-01-18 23:26:56] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:26:56] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:34:39] === ON-MODIFY: Fix Honda ===
+[2026-01-18 23:34:39] Original status: pending, Modified status: pending
+[2026-01-18 23:34:39] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:34:39] Priority changed: False
+[2026-01-18 23:34:39] Old in VALID: True, New in VALID: True
+[2026-01-18 23:34:39] Is deletion: False, Is completion: False
+[2026-01-18 23:34:39] Regular modification (no priority change), updating context
+[2026-01-18 23:34:39] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:34:39]   Priority 1: 1 tasks
+[2026-01-18 23:34:39]   Returning lowest priority: 1
+[2026-01-18 23:34:39] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:34:39] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:36:34] === ON-MODIFY: fix brakes ===
+[2026-01-18 23:36:34] Original status: pending, Modified status: pending
+[2026-01-18 23:36:34] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:36:34] Priority changed: False
+[2026-01-18 23:36:34] Old in VALID: True, New in VALID: True
+[2026-01-18 23:36:34] Is deletion: False, Is completion: False
+[2026-01-18 23:36:34] Regular modification (no priority change), updating context
+[2026-01-18 23:36:34] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:36:34]   Priority 1: 1 tasks
+[2026-01-18 23:36:34]   Returning lowest priority: 1
+[2026-01-18 23:36:34] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:36:34] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:36:34] === ON-MODIFY: fix engine belt ===
+[2026-01-18 23:36:34] Original status: pending, Modified status: pending
+[2026-01-18 23:36:34] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:36:34] Priority changed: False
+[2026-01-18 23:36:34] Old in VALID: True, New in VALID: True
+[2026-01-18 23:36:34] Is deletion: False, Is completion: False
+[2026-01-18 23:36:34] Regular modification (no priority change), updating context
+[2026-01-18 23:36:34] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:36:34]   Priority 1: 1 tasks
+[2026-01-18 23:36:34]   Returning lowest priority: 1
+[2026-01-18 23:36:34] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:36:34] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:36:34] === ON-MODIFY: fix door handles ===
+[2026-01-18 23:36:34] Original status: pending, Modified status: pending
+[2026-01-18 23:36:34] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:36:34] Priority changed: False
+[2026-01-18 23:36:34] Old in VALID: True, New in VALID: True
+[2026-01-18 23:36:34] Is deletion: False, Is completion: False
+[2026-01-18 23:36:34] Regular modification (no priority change), updating context
+[2026-01-18 23:36:34] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:36:35]   Priority 1: 1 tasks
+[2026-01-18 23:36:35]   Returning lowest priority: 1
+[2026-01-18 23:36:35] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:36:35] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:44:25] === ON-MODIFY: testing needs ===
+[2026-01-18 23:44:25] Original status: pending, Modified status: deleted
+[2026-01-18 23:44:25] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:44:25] Priority changed: False
+[2026-01-18 23:44:25] Old in VALID: True, New in VALID: True
+[2026-01-18 23:44:25] Is deletion: True, Is completion: False
+[2026-01-18 23:44:25] Task deleted, updating context (excluding UUID)
+[2026-01-18 23:44:25] get_lowest_priority called, exclude_uuid=34fde638-f82a-4b5b-a5c4-6a70f773968b
+[2026-01-18 23:44:25]   Priority 1: 1 tasks
+[2026-01-18 23:44:25]   Returning lowest priority: 1
+[2026-01-18 23:44:25] Lowest priority (excluding 34fde638-f82a-4b5b-a5c4-6a70f773968b, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:44:25] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:45:14] === ON-MODIFY: Verisign more documents ===
+[2026-01-18 23:45:14] Original status: pending, Modified status: pending
+[2026-01-18 23:45:14] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:45:14] Priority changed: False
+[2026-01-18 23:45:14] Old in VALID: True, New in VALID: True
+[2026-01-18 23:45:14] Is deletion: False, Is completion: False
+[2026-01-18 23:45:14] Regular modification (no priority change), updating context
+[2026-01-18 23:45:14] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:45:14]   Priority 1: 1 tasks
+[2026-01-18 23:45:14]   Returning lowest priority: 1
+[2026-01-18 23:45:14] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:45:14] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:46:47] === ON-MODIFY: call Peter and Nicky re Madoc stuff ===
+[2026-01-18 23:46:47] Original status: pending, Modified status: pending
+[2026-01-18 23:46:47] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:46:47] Priority changed: False
+[2026-01-18 23:46:47] Old in VALID: True, New in VALID: True
+[2026-01-18 23:46:47] Is deletion: False, Is completion: False
+[2026-01-18 23:46:47] Regular modification (no priority change), updating context
+[2026-01-18 23:46:47] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:46:47]   Priority 1: 1 tasks
+[2026-01-18 23:46:47]   Returning lowest priority: 1
+[2026-01-18 23:46:47] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:46:47] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:47:23] === ON-MODIFY: clear out Madoc storage ===
+[2026-01-18 23:47:23] Original status: pending, Modified status: pending
+[2026-01-18 23:47:23] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:47:23] Priority changed: False
+[2026-01-18 23:47:23] Old in VALID: True, New in VALID: True
+[2026-01-18 23:47:23] Is deletion: False, Is completion: False
+[2026-01-18 23:47:23] Regular modification (no priority change), updating context
+[2026-01-18 23:47:23] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:47:23]   Priority 1: 1 tasks
+[2026-01-18 23:47:23]   Returning lowest priority: 1
+[2026-01-18 23:47:23] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:47:23] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:53:08] === ON-MODIFY: enter jrnl and hledger ===
+[2026-01-18 23:53:08] Original status: recurring, Modified status: recurring
+[2026-01-18 23:53:08] Original priority: '4', Modified priority: '4'
+[2026-01-18 23:53:08] Priority changed: False
+[2026-01-18 23:53:08] Old in VALID: True, New in VALID: True
+[2026-01-18 23:53:08] Is deletion: False, Is completion: False
+[2026-01-18 23:53:08] Regular modification (no priority change), updating context
+[2026-01-18 23:53:08] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:53:08]   Priority 1: 1 tasks
+[2026-01-18 23:53:08]   Returning lowest priority: 1
+[2026-01-18 23:53:08] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:53:08] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:54:06] === ON-MODIFY: enter jrnl and hledger ===
+[2026-01-18 23:54:06] Original status: recurring, Modified status: deleted
+[2026-01-18 23:54:06] Original priority: '4', Modified priority: '4'
+[2026-01-18 23:54:06] Priority changed: False
+[2026-01-18 23:54:06] Old in VALID: True, New in VALID: True
+[2026-01-18 23:54:06] Is deletion: True, Is completion: False
+[2026-01-18 23:54:06] Task deleted, updating context (excluding UUID)
+[2026-01-18 23:54:06] get_lowest_priority called, exclude_uuid=6e792a3d-bd76-4f86-9799-ef74e308961a
+[2026-01-18 23:54:07]   Priority 1: 1 tasks
+[2026-01-18 23:54:07]   Returning lowest priority: 1
+[2026-01-18 23:54:07] Lowest priority (excluding 6e792a3d-bd76-4f86-9799-ef74e308961a, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:54:07] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:54:07] === ON-MODIFY: enter jrnl and hledger ===
+[2026-01-18 23:54:07] Original status: pending, Modified status: deleted
+[2026-01-18 23:54:07] Original priority: '4', Modified priority: '4'
+[2026-01-18 23:54:07] Priority changed: False
+[2026-01-18 23:54:07] Old in VALID: True, New in VALID: True
+[2026-01-18 23:54:07] Is deletion: True, Is completion: False
+[2026-01-18 23:54:07] Task deleted, updating context (excluding UUID)
+[2026-01-18 23:54:07] get_lowest_priority called, exclude_uuid=ba85dc23-49bd-40bd-a6be-aaa07771e8e1
+[2026-01-18 23:54:07]   Priority 1: 1 tasks
+[2026-01-18 23:54:07]   Returning lowest priority: 1
+[2026-01-18 23:54:07] Lowest priority (excluding ba85dc23-49bd-40bd-a6be-aaa07771e8e1, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:54:07] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:56:09] === ON-MODIFY: enter jrnl and hledger ===
+[2026-01-18 23:56:09] Original status: recurring, Modified status: recurring
+[2026-01-18 23:56:09] Original priority: '2', Modified priority: '2'
+[2026-01-18 23:56:09] Priority changed: False
+[2026-01-18 23:56:09] Old in VALID: True, New in VALID: True
+[2026-01-18 23:56:09] Is deletion: False, Is completion: False
+[2026-01-18 23:56:09] Regular modification (no priority change), updating context
+[2026-01-18 23:56:09] get_lowest_priority called, exclude_uuid=None
+[2026-01-18 23:56:09]   Priority 1: 1 tasks
+[2026-01-18 23:56:09]   Returning lowest priority: 1
+[2026-01-18 23:56:09] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 23:56:09] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-19 00:50:04] === ON-MODIFY: call Peter and Nicky re Madoc stuff ===
+[2026-01-19 00:50:04] Original status: pending, Modified status: pending
+[2026-01-19 00:50:04] Original priority: '2', Modified priority: '2'
+[2026-01-19 00:50:04] Priority changed: False
+[2026-01-19 00:50:04] Old in VALID: True, New in VALID: True
+[2026-01-19 00:50:04] Is deletion: False, Is completion: False
+[2026-01-19 00:50:04] Regular modification (no priority change), updating context
+[2026-01-19 00:50:04] get_lowest_priority called, exclude_uuid=None
+[2026-01-19 00:50:04]   Priority 1: 1 tasks
+[2026-01-19 00:50:04]   Returning lowest priority: 1
+[2026-01-19 00:50:04] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-19 00:50:04] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-19 00:52:23] === ON-MODIFY: Verisign more documents ===
+[2026-01-19 00:52:23] Original status: pending, Modified status: pending
+[2026-01-19 00:52:23] Original priority: '2', Modified priority: '2'
+[2026-01-19 00:52:23] Priority changed: False
+[2026-01-19 00:52:23] Old in VALID: True, New in VALID: True
+[2026-01-19 00:52:23] Is deletion: False, Is completion: False
+[2026-01-19 00:52:23] Regular modification (no priority change), updating context
+[2026-01-19 00:52:23] get_lowest_priority called, exclude_uuid=None
+[2026-01-19 00:52:23]   Priority 1: 1 tasks
+[2026-01-19 00:52:23]   Returning lowest priority: 1
+[2026-01-19 00:52:23] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-19 00:52:23] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-19 00:52:53] === ON-MODIFY: Fix Honda ===
+[2026-01-19 00:52:53] Original status: pending, Modified status: pending
+[2026-01-19 00:52:53] Original priority: '2', Modified priority: '2'
+[2026-01-19 00:52:53] Priority changed: False
+[2026-01-19 00:52:53] Old in VALID: True, New in VALID: True
+[2026-01-19 00:52:53] Is deletion: False, Is completion: False
+[2026-01-19 00:52:53] Regular modification (no priority change), updating context
+[2026-01-19 00:52:53] get_lowest_priority called, exclude_uuid=None
+[2026-01-19 00:52:53]   Priority 1: 1 tasks
+[2026-01-19 00:52:53]   Returning lowest priority: 1
+[2026-01-19 00:52:53] Lowest priority (excluding None, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-19 00:52:53] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )

@@ -170,8 +170,7 @@ def show_report():
     
     print()
     print("Priority Hierarchy Status")
-    print("=" * 80)
-    print()
+    print("              ==========================================")
     
     # Determine which level is lowest (has tasks)
     lowest_level = None
@@ -180,21 +179,27 @@ def show_report():
             lowest_level = level
             break
     
-    # Draw pyramid with proper indentation
+    # Calculate total tasks
+    total_tasks = sum(counts.values())
+    
+    # Draw ASCII pyramid
     pyramid = [
-        ('6', 'Higher Goals', 54),
-        ('5', 'Self Actualization', 48),
-        ('4', 'Esteem, Respect & Recognition', 39),
-        ('3', 'Love & Belonging, Friends & Family', 31),
-        ('2', 'Personal safety, security, health, financial', 17),
-        ('1', 'Physiological; Air, Water, Food & Shelter', 8)
+        ('6', '/               Higher Goals               \\'),
+        ('5', '/             Self Actualization             \\'),
+        ('4', '/         Esteem, Respect & Recognition        \\'),
+        ('3', '/       Love & Belonging, Friends & Family       \\'),
+        ('2', '/   Personal safety, security, health, financial   \\'),
+        ('1', '/      Physiological; Air, Water, Food & Shelter     \\')
     ]
     
-    for level, label, indent in pyramid:
-        marker = ' -->' if level == lowest_level else '    '
+    for level, label in pyramid:
+        marker = ' |->' if level == lowest_level else '     '
         count = counts[level]
-        padding = ' ' * indent
-        print(f"{marker}{level}  {padding}{label} ({count})")
+        print(f"{marker} {level}  {label}  ({count})")
+    
+    print("        ======================================================")
+    print(f"        Config: span={span}, lookahead={lookahead}, lookback={lookback}              ({total_tasks})")
+    print()
     
     print()
     print(f"Config: span={span}, lookahead={lookahead}, lookback={lookback}")
@@ -226,7 +231,12 @@ def cmd_span(new_span):
         
         if set_config_value('priority.span', str(span)):
             print(f"Priority span set to {span}")
-            print("Context filter will update automatically on next task change")
+            print("Updating context filter now...")
+            # Trigger immediate context update
+            if update_context():
+                print("✓ Context filter updated")
+            else:
+                print("✗ Context update failed")
             return 0
         else:
             return 1
@@ -386,23 +396,6 @@ def cmd_review():
     
     print(f"\nAll tasks reviewed! Updated {updated} tasks, skipped {skipped}")
     return 0
-
-def cmd_span(new_span):
-    """Set priority span value"""
-    try:
-        span = int(new_span)
-        if span < 1 or span > 6:
-            raise ValueError
-        
-        if set_config_value('priority.span', str(span)):
-            print(f"Priority span set to {span}")
-            print("Context filter will update automatically on next task change")
-            return 0
-        else:
-            return 1
-    except ValueError:
-        print(f"Invalid span value: {new_span}", file=sys.stderr)
-        return 1
 
 def main():
     """Main entry point"""
