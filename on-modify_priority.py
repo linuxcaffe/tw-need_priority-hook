@@ -228,8 +228,10 @@ def main():
         
         log(f"=== ON-MODIFY: {desc} ===")
         log(f"Original status: {original.get('status')}, Modified status: {modified.get('status')}")
-        log(f"Original priority: {old_priority}, Modified priority: {new_priority}")
-        log(f"Is deletion: {is_deletion}, Is completion: {is_completion}, Priority changed: {priority_changed}")
+        log(f"Original priority: '{old_priority}', Modified priority: '{new_priority}'")
+        log(f"Priority changed: {priority_changed}")
+        log(f"Old in VALID: {old_priority in VALID_PRIORITIES}, New in VALID: {new_priority in VALID_PRIORITIES}")
+        log(f"Is deletion: {is_deletion}, Is completion: {is_completion}")
         
         # Check if priority was removed
         if 'priority' not in modified or not modified['priority']:

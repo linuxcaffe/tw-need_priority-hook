@@ -1,0 +1,11 @@
+Priority Hierarchy Status
+              ==========================================
+     6       /               Higher Goals               \       (0)
+     5      /             Self Actualization             \      (0)
+     4     /         Esteem, Respect & Recognition        \    (18)
+ |-> 3    /       Love & Belonging, Friends & Family       \    (4)
+ |   2   /   Personal safety, security, health, financial   \  (10)
+ |-> 1  /      Physiological; Air, Water, Food & Shelter     \  (1)
+        ======================================================
+        Config: span=3, lookahead=2d, lookback=1w              (33)
+

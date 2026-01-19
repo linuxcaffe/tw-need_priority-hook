@@ -312,3 +312,70 @@
 [2026-01-18 18:15:14]   Returning lowest priority: 1
 [2026-01-18 18:15:14] Lowest priority (excluding 86b7aaf9-93c4-441a-8f98-4e356d09cbb6, new=1): 1, filter: pri.after:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
 [2026-01-18 18:15:14] Updated context.needs.read=pri.after:3 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:25:16] === ON-MODIFY: Fix Honda ===
+[2026-01-18 18:25:16] Original status: pending, Modified status: pending
+[2026-01-18 18:25:16] Original priority: 4, Modified priority: 1
+[2026-01-18 18:25:16] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:25:16] Priority changed from 4 to 1
+[2026-01-18 18:25:16] Database still shows task at pri:4
+[2026-01-18 18:25:16] Simulating move: exclude from 4, add to 1
+[2026-01-18 18:25:16] get_lowest_priority_with_change: exclude_uuid=395d7338-1969-4a82-8bdf-c6a149c9f673, new_priority=1
+[2026-01-18 18:25:16]   Priority 1: 2 tasks (DB)
+[2026-01-18 18:25:16]     Adding 1 task at level 1 (new priority)
+[2026-01-18 18:25:16]   Priority 1: 3 tasks (adjusted)
+[2026-01-18 18:25:16]   Returning lowest priority: 1
+[2026-01-18 18:25:16] Lowest priority (excluding 395d7338-1969-4a82-8bdf-c6a149c9f673, new=1): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:25:16] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:27:46] === ON-MODIFY: testing needs again ===
+[2026-01-18 18:27:46] Original status: pending, Modified status: deleted
+[2026-01-18 18:27:46] Original priority: 1, Modified priority: 1
+[2026-01-18 18:27:46] Is deletion: True, Is completion: False, Priority changed: False
+[2026-01-18 18:27:46] Task deleted, updating context (excluding UUID)
+[2026-01-18 18:27:46] get_lowest_priority called, exclude_uuid=a26380a0-afe9-412e-bd4b-cbee6cb8c29e
+[2026-01-18 18:27:46]   Priority 1: 3 tasks
+[2026-01-18 18:27:46]     Excluding 1 task(s) at level 1
+[2026-01-18 18:27:46]   Returning lowest priority: 1
+[2026-01-18 18:27:46] Lowest priority (excluding a26380a0-afe9-412e-bd4b-cbee6cb8c29e, new=None): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:27:46] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:28:17] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 18:28:17] Original status: pending, Modified status: pending
+[2026-01-18 18:28:17] Original priority: 1, Modified priority: 2
+[2026-01-18 18:28:17] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:28:17] Priority changed from 1 to 2
+[2026-01-18 18:28:17] Database still shows task at pri:1
+[2026-01-18 18:28:17] Simulating move: exclude from 1, add to 2
+[2026-01-18 18:28:17] get_lowest_priority_with_change: exclude_uuid=86b7aaf9-93c4-441a-8f98-4e356d09cbb6, new_priority=2
+[2026-01-18 18:28:17]   Priority 1: 2 tasks (DB)
+[2026-01-18 18:28:17]     Excluding 1 task(s) at level 1 (old priority)
+[2026-01-18 18:28:17]   Priority 1: 1 tasks (adjusted)
+[2026-01-18 18:28:17]   Returning lowest priority: 1
+[2026-01-18 18:28:17] Lowest priority (excluding 86b7aaf9-93c4-441a-8f98-4e356d09cbb6, new=2): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:28:17] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:29:00] === ON-MODIFY: buy Tom fenbendozol ===
+[2026-01-18 18:29:00] Original status: pending, Modified status: pending
+[2026-01-18 18:29:00] Original priority: 2, Modified priority: 1
+[2026-01-18 18:29:00] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:29:00] Priority changed from 2 to 1
+[2026-01-18 18:29:00] Database still shows task at pri:2
+[2026-01-18 18:29:00] Simulating move: exclude from 2, add to 1
+[2026-01-18 18:29:00] get_lowest_priority_with_change: exclude_uuid=86b7aaf9-93c4-441a-8f98-4e356d09cbb6, new_priority=1
+[2026-01-18 18:29:00]   Priority 1: 1 tasks (DB)
+[2026-01-18 18:29:00]     Adding 1 task at level 1 (new priority)
+[2026-01-18 18:29:00]   Priority 1: 2 tasks (adjusted)
+[2026-01-18 18:29:00]   Returning lowest priority: 1
+[2026-01-18 18:29:00] Lowest priority (excluding 86b7aaf9-93c4-441a-8f98-4e356d09cbb6, new=1): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:29:00] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:29:49] === ON-MODIFY: Fix Honda ===
+[2026-01-18 18:29:49] Original status: pending, Modified status: pending
+[2026-01-18 18:29:49] Original priority: 1, Modified priority: 2
+[2026-01-18 18:29:49] Is deletion: False, Is completion: False, Priority changed: True
+[2026-01-18 18:29:49] Priority changed from 1 to 2
+[2026-01-18 18:29:49] Database still shows task at pri:1
+[2026-01-18 18:29:49] Simulating move: exclude from 1, add to 2
+[2026-01-18 18:29:49] get_lowest_priority_with_change: exclude_uuid=395d7338-1969-4a82-8bdf-c6a149c9f673, new_priority=2
+[2026-01-18 18:29:49]   Priority 1: 2 tasks (DB)
+[2026-01-18 18:29:49]     Excluding 1 task(s) at level 1 (old priority)
+[2026-01-18 18:29:49]   Priority 1: 1 tasks (adjusted)
+[2026-01-18 18:29:49]   Returning lowest priority: 1
+[2026-01-18 18:29:49] Lowest priority (excluding 395d7338-1969-4a82-8bdf-c6a149c9f673, new=2): 1, filter: pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
+[2026-01-18 18:29:49] Updated context.needs.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
