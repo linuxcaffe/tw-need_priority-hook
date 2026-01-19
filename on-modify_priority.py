@@ -57,7 +57,7 @@ def get_lowest_priority_with_change(exclude_uuid=None, new_priority=None):
         
         for level in ['1', '2', '3', '4', '5', '6']:
             result = subprocess.run(
-                ['task', f'priority:{level}', 'status:pending', 'count'],
+                ['task', 'rc.hooks=off', f'priority:{level}', 'status:pending', 'count'],
                 capture_output=True,
                 text=True
             )
@@ -70,7 +70,7 @@ def get_lowest_priority_with_change(exclude_uuid=None, new_priority=None):
             # If we're excluding a task at this level, decrement count
             if exclude_uuid and count > 0:
                 check_result = subprocess.run(
-                    ['task', f'uuid:{exclude_uuid}', f'priority:{level}', 'count'],
+                    ['task', 'rc.hooks=off', f'uuid:{exclude_uuid}', f'priority:{level}', 'count'],
                     capture_output=True,
                     text=True
                 )
@@ -105,7 +105,7 @@ def get_lowest_priority(exclude_uuid=None):
         log(f"get_lowest_priority called, exclude_uuid={exclude_uuid}")
         for level in ['1', '2', '3', '4', '5', '6']:
             result = subprocess.run(
-                ['task', f'priority:{level}', 'status:pending', 'count'],
+                ['task', 'rc.hooks=off', f'priority:{level}', 'status:pending', 'count'],
                 capture_output=True,
                 text=True
             )
@@ -119,7 +119,7 @@ def get_lowest_priority(exclude_uuid=None):
             if exclude_uuid and count > 0:
                 # Check if the excluded task is at this level
                 check_result = subprocess.run(
-                    ['task', f'uuid:{exclude_uuid}', f'priority:{level}', 'count'],
+                    ['task', 'rc.hooks=off', f'uuid:{exclude_uuid}', f'priority:{level}', 'count'],
                     capture_output=True,
                     text=True
                 )
@@ -186,19 +186,19 @@ def update_context_in_config(exclude_uuid=None, new_priority=None):
         found = False
         with open(CONFIG_FILE, 'r') as f:
             for line in f:
-                if line.startswith('context.needs.read='):
-                    lines.append(f'context.needs.read={filter_expr}\n')
+                if line.startswith('context.need.read='):
+                    lines.append(f'context.need.read={filter_expr}\n')
                     found = True
                 else:
                     lines.append(line)
         
         if not found:
-            lines.append(f'\ncontext.needs.read={filter_expr}\n')
+            lines.append(f'\ncontext.need.read={filter_expr}\n')
         
         with open(CONFIG_FILE, 'w') as f:
             f.writelines(lines)
         
-        log(f"Updated context.needs.read={filter_expr}")
+        log(f"Updated context.need.read={filter_expr}")
         return True
         
     except Exception as e:

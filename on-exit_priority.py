@@ -48,7 +48,7 @@ def get_lowest_priority():
     try:
         for level in ['1', '2', '3', '4', '5', '6']:
             result = subprocess.run(
-                ['task', f'priority:{level}', 'status:pending', 'count'],
+                ['task', 'rc.hooks=off', f'priority:{level}', 'status:pending', 'count'],
                 capture_output=True,
                 text=True
             )
@@ -99,19 +99,19 @@ def update_context_in_config():
         found = False
         with open(CONFIG_FILE, 'r') as f:
             for line in f:
-                if line.startswith('context.needs.read='):
-                    lines.append(f'context.needs.read={filter_expr}\n')
+                if line.startswith('context.need.read='):
+                    lines.append(f'context.need.read={filter_expr}\n')
                     found = True
                 else:
                     lines.append(line)
         
         if not found:
-            lines.append(f'\ncontext.needs.read={filter_expr}\n')
+            lines.append(f'\ncontext.need.read={filter_expr}\n')
         
         with open(CONFIG_FILE, 'w') as f:
             f.writelines(lines)
         
-        log(f"Updated context.needs.read={filter_expr}")
+        log(f"Updated context.need.read={filter_expr}")
         return True
         
     except Exception as e:
