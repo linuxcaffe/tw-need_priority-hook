@@ -3,7 +3,7 @@
 nn.py - Priority hierarchy management for Taskwarrior (Needs Navigator)
 Part of tw-priority-hook project
 
-The hooks automatically maintain context.needs.read in need.rc.
+The hooks automatically maintain context.need.read in need.rc.
 This script shows the current state, adjusts configuration, and helps review/assign priorities.
 
 Usage:
@@ -11,6 +11,13 @@ Usage:
     nn span <N>       - Set priority span (how many levels to show)
     nn update         - Manually recalculate and update context filter
     nn review         - Review and assign priorities to tasks
+
+NOTE: Due to taskwarrior alias limitations, you must call nn directly:
+    ~/.task/hooks/priority/nn.py span 2
+    
+Or create a shell alias in your ~/.bashrc:
+    alias nn='~/.task/hooks/priority/nn.py'
+Then use: nn span 2
 """
 
 import sys
@@ -21,6 +28,15 @@ import json
 # Configuration
 HOOK_DIR = os.path.expanduser("~/.task/hooks/priority")
 CONFIG_FILE = os.path.join(HOOK_DIR, "need.rc")
+
+# Debug mode - set to 1 to enable debug output
+DEBUG = 1
+
+def debug_print(msg):
+    """Print debug message if DEBUG is enabled"""
+    if DEBUG:
+        print(f"DEBUG: {msg}")
+
 
 def get_config_value(key, default=None):
     """Read configuration value from need.rc"""
@@ -67,7 +83,7 @@ def get_task_counts():
         for level in ['1', '2', '3', '4', '5', '6']:
             # Use rc.context=none to ignore active context
             result = subprocess.run(
-                ['task', 'rc.context=none', f'priority:{level}', 'status:pending', 'count'],
+                ['task', 'rc.hooks=off', 'rc.context=none', f'priority:{level}', 'status:pending', 'count'],
                 capture_output=True,
                 text=True
             )
@@ -109,7 +125,10 @@ def build_context_filter(min_priority, span, lookahead, lookback):
 def update_context():
     """Manually recalculate and update context filter"""
     try:
+        debug_print("update_context() called")
         lowest = get_lowest_priority()
+        debug_print(f"get_lowest_priority returned: {lowest}")
+        
         if not lowest:
             print("No pending tasks, clearing context filter")
             filter_expr = ""
@@ -117,36 +136,44 @@ def update_context():
             span = get_config_value('priority.span', '2')
             lookahead = get_config_value('priority.lookahead', '2d')
             lookback = get_config_value('priority.lookback', '1w')
+            debug_print(f"Config values - span={span}, lookahead={lookahead}, lookback={lookback}")
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
             print(f"Lowest priority: {lowest}")
             print(f"Filter: {filter_expr}")
         
         # Update need.rc
+        debug_print(f"Opening {CONFIG_FILE} for update")
         lines = []
         found = False
         with open(CONFIG_FILE, 'r') as f:
             for line in f:
-                if line.startswith('context.needs.read='):
-                    lines.append(f'context.needs.read={filter_expr}\n')
+                if line.startswith('context.need.read='):
+                    lines.append(f'context.need.read={filter_expr}\n')
                     found = True
+                    debug_print("Found and updated context.need.read line")
                 else:
                     lines.append(line)
         
         if not found:
-            lines.append(f'\ncontext.needs.read={filter_expr}\n')
+            debug_print("context.need.read not found, appending")
+            lines.append(f'\ncontext.need.read={filter_expr}\n')
         
         with open(CONFIG_FILE, 'w') as f:
             f.writelines(lines)
         
         print("Context updated successfully")
+        debug_print("update_context() returning True")
         return True
         
     except Exception as e:
         print(f"Error updating context: {e}", file=sys.stderr)
+        debug_print(f"Exception in update_context: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 def get_active_context():
-    """Check if 'needs' context is currently active"""
+    """Check if 'need' context is currently active"""
     try:
         result = subprocess.run(
             ['task', '_get', 'rc.context'],
@@ -154,7 +181,7 @@ def get_active_context():
             text=True
         )
         if result.returncode == 0:
-            return result.stdout.strip() == 'needs'
+            return result.stdout.strip() == 'need'
     except:
         pass
     return False
@@ -162,7 +189,7 @@ def get_active_context():
 def show_report():
     """Display priority pyramid report"""
     counts = get_task_counts()
-    context_filter = get_config_value('context.needs.read', '')
+    context_filter = get_config_value('context.need.read', '')
     is_active = get_active_context()
     span = get_config_value('priority.span', '2')
     lookahead = get_config_value('priority.lookahead', '2d')
@@ -184,25 +211,21 @@ def show_report():
     
     # Draw ASCII pyramid
     pyramid = [
-        ('6', '/               Higher Goals               \\'),
-        ('5', '/             Self Actualization             \\'),
-        ('4', '/         Esteem, Respect & Recognition        \\'),
-        ('3', '/       Love & Belonging, Friends & Family       \\'),
-        ('2', '/   Personal safety, security, health, financial   \\'),
-        ('1', '/      Physiological; Air, Water, Food & Shelter     \\')
+        ('6', '      /               Higher Goals               \\      '),
+        ('5', '     /             Self Actualization             \\     '),
+        ('4', '    /         Esteem, Respect & Recognition        \\   '),
+        ('3', '   /       Love & Belonging, Friends & Family       \\   '),
+        ('2', '  /   Personal safety, security, health, financial   \\  '),
+        ('1', ' /      Physiological; Air, Water, Food & Shelter     \ ')
     ]
     
     for level, label in pyramid:
-        marker = ' |->' if level == lowest_level else '     '
+        marker = '|->' if level == lowest_level else '   '
         count = counts[level]
-        print(f"{marker} {level}  {label}  ({count})")
+        print(f" {marker} {level} {label} ({count})")
     
     print("        ======================================================")
     print(f"        Config: span={span}, lookahead={lookahead}, lookback={lookback}              ({total_tasks})")
-    print()
-    
-    print()
-    print(f"Config: span={span}, lookahead={lookahead}, lookback={lookback}")
     print()
     
     # Show current context status
@@ -211,11 +234,11 @@ def show_report():
         print(f"  {context_filter}")
         print()
         if is_active:
-            print("Status: Context 'needs' is ACTIVE")
+            print("Status: Context 'need' is ACTIVE")
             print("  Deactivate: task context none")
         else:
-            print("Status: Context 'needs' is defined but NOT active")
-            print("  Activate: task context needs")
+            print("Status: Context 'need' is defined but NOT active")
+            print("  Activate: task context need")
     else:
         print("No pending tasks - context filter is empty")
         print("Add tasks to automatically update the filter")
@@ -225,23 +248,36 @@ def show_report():
 def cmd_span(new_span):
     """Set priority span value"""
     try:
+        debug_print(f"Received span value: '{new_span}'")
         span = int(new_span)
+        debug_print(f"Converted to int: {span}")
+        
         if span < 1 or span > 6:
+            debug_print(f"Span {span} out of range 1-6")
             raise ValueError
         
+        debug_print(f"Setting priority.span={span} in {CONFIG_FILE}")
         if set_config_value('priority.span', str(span)):
             print(f"Priority span set to {span}")
             print("Updating context filter now...")
             # Trigger immediate context update
             if update_context():
+                debug_print("update_context returned True")
                 print("✓ Context filter updated")
             else:
+                debug_print("update_context returned False")
                 print("✗ Context update failed")
             return 0
         else:
+            debug_print("set_config_value returned False")
             return 1
     except ValueError:
         print(f"Invalid span value: {new_span}", file=sys.stderr)
+        return 1
+    except Exception as e:
+        debug_print(f"Exception in cmd_span: {e}")
+        import traceback
+        traceback.print_exc()
         return 1
 
 def get_review_tasks():
@@ -256,7 +292,7 @@ def get_review_tasks():
     try:
         # Get all pending tasks as JSON
         result = subprocess.run(
-            ['task', 'rc.context=none', 'status:pending', 'export'],
+            ['task', 'rc.hooks=off', 'rc.context=none', 'status:pending', 'export'],
             capture_output=True,
             text=True
         )
@@ -294,7 +330,7 @@ def get_review_tasks():
 
 def display_task_detail(task):
     """Display task with all relevant attributes"""
-    print("\n" + "─" * 80)
+    print("\n" + "â”€" * 80)
     print(f"ID: {task.get('id', 'N/A')}")
     print(f"Description: {task.get('description', 'N/A')}")
     
@@ -317,7 +353,7 @@ def display_task_detail(task):
     if 'urgency' in task:
         print(f"Urgency: {task['urgency']:.2f}")
     
-    print("─" * 80)
+    print("â”€" * 80)
 
 def cmd_review():
     """Interactive review and assignment of priorities"""
@@ -355,7 +391,7 @@ def cmd_review():
                 
                 if response == '':
                     # Skip this task
-                    print("⊘ Skipped")
+                    print("âŠ˜ Skipped")
                     skipped += 1
                     reviewed += 1
                     break
@@ -370,12 +406,12 @@ def cmd_review():
                     )
                     
                     if result.returncode == 0:
-                        print(f"✓ Set priority to {response}")
+                        print(f"âœ“ Set priority to {response}")
                         updated += 1
                         reviewed += 1
                         break
                     else:
-                        print(f"✗ Error updating task: {result.stderr}")
+                        print(f"âœ— Error updating task: {result.stderr}")
                         break
                 else:
                     print("Invalid input. Enter 1-6, press enter to skip, or 'q'")
@@ -399,7 +435,9 @@ def cmd_review():
 
 def main():
     """Main entry point"""
+    debug_print(f"main() called, sys.argv = {sys.argv}")
     args = sys.argv[1:]
+    debug_print(f"args after [1:] = {args}")
     
     if not args:
         show_report()

@@ -7087,3 +7087,87 @@
 [2026-01-19 15:38:49] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
 [2026-01-19 15:38:49] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
 [2026-01-19 15:38:49] Update completed: True
+[2026-01-19 15:45:31] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:45:31] Input received: 0 bytes
+[2026-01-19 15:45:31] Calling update_context_in_config()
+[2026-01-19 15:45:31] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:45:31] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:45:31] Update completed: True
+[2026-01-19 15:45:31] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:45:31] Input received: 0 bytes
+[2026-01-19 15:45:31] Calling update_context_in_config()
+[2026-01-19 15:45:31] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:45:31] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:45:31] Update completed: True
+[2026-01-19 15:45:52] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:45:52] Input received: 0 bytes
+[2026-01-19 15:45:52] Calling update_context_in_config()
+[2026-01-19 15:45:52] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:45:52] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:45:52] Update completed: True
+[2026-01-19 15:52:38] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:52:38] Input received: 0 bytes
+[2026-01-19 15:52:38] Calling update_context_in_config()
+[2026-01-19 15:52:38] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:52:38] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:52:38] Update completed: True
+[2026-01-19 15:52:44] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:52:44] Input received: 0 bytes
+[2026-01-19 15:52:44] Calling update_context_in_config()
+[2026-01-19 15:52:44] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:52:44] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:52:44] Update completed: True
+[2026-01-19 15:54:53] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:54:53] Input received: 0 bytes
+[2026-01-19 15:54:53] Calling update_context_in_config()
+[2026-01-19 15:54:54] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:54:54] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:54:54] Update completed: True
+[2026-01-19 15:55:03] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:55:03] Input received: 0 bytes
+[2026-01-19 15:55:03] Calling update_context_in_config()
+[2026-01-19 15:55:03] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:55:03] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:55:03] Update completed: True
+[2026-01-19 15:55:03] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:55:03] Input received: 0 bytes
+[2026-01-19 15:55:03] Calling update_context_in_config()
+[2026-01-19 15:55:03] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:55:03] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:55:03] Update completed: True
+[2026-01-19 15:59:54] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:59:54] Input received: 0 bytes
+[2026-01-19 15:59:54] Calling update_context_in_config()
+[2026-01-19 15:59:54] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:59:54] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:59:54] Update completed: True
+[2026-01-19 15:59:54] === ON-EXIT TRIGGERED ===
+[2026-01-19 15:59:54] Input received: 0 bytes
+[2026-01-19 15:59:54] Calling update_context_in_config()
+[2026-01-19 15:59:54] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:59:54] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 15:59:54] Update completed: True
+[2026-01-19 16:05:59] === ON-EXIT TRIGGERED ===
+[2026-01-19 16:05:59] Input received: 0 bytes
+[2026-01-19 16:05:59] Calling update_context_in_config()
+[2026-01-19 16:05:59] Lowest priority: 1, filter: pri.after:3 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:05:59] Updated context.need.read=pri.after:3 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:05:59] Update completed: True
+[2026-01-19 16:06:08] === ON-EXIT TRIGGERED ===
+[2026-01-19 16:06:08] Input received: 0 bytes
+[2026-01-19 16:06:08] Calling update_context_in_config()
+[2026-01-19 16:06:08] Lowest priority: 1, filter: pri.after:3 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:06:08] Updated context.need.read=pri.after:3 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:06:08] Update completed: True
+[2026-01-19 16:06:19] === ON-EXIT TRIGGERED ===
+[2026-01-19 16:06:19] Input received: 0 bytes
+[2026-01-19 16:06:19] Calling update_context_in_config()
+[2026-01-19 16:06:19] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:06:19] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:06:19] Update completed: True
+[2026-01-19 16:06:25] === ON-EXIT TRIGGERED ===
+[2026-01-19 16:06:25] Input received: 0 bytes
+[2026-01-19 16:06:25] Calling update_context_in_config()
+[2026-01-19 16:06:25] Lowest priority: 1, filter: pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:06:25] Updated context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+[2026-01-19 16:06:25] Update completed: True

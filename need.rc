@@ -51,9 +51,11 @@ priority.lookback=1w
 
 # Context definition (auto-maintained by hooks)
 # Uses pri.after:N syntax where pri.after:3 shows pri:1 and pri:2
-context.need.read=pri.after:4 or ( scheduled.before:today+2d and sched.after:today-1w ) or ( due.before:today+2d and due.after:today-1w )
+context.need.read=pri.after:4 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
 ### include started
 
 # Command alias for nn (Needs Navigator)
-# Use 'task nn' to run the report
+# NOTE: Taskwarrior aliases cannot pass arguments like 'span 2'
+# To use nn with arguments, call directly: ~/.task/hooks/priority/nn.py span 2
+# Or add to ~/.bashrc: alias nn='~/.task/hooks/priority/nn.py'
 alias.nn=exec sh -c '~/.task/hooks/priority/nn.py'
