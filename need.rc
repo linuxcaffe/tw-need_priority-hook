@@ -56,6 +56,6 @@ context.need.read=
 
 # Command alias for nn (Needs Navigator)
 # NOTE: Taskwarrior aliases cannot pass arguments like 'span 2'
-# To use nn with arguments, call directly: ~/.task/hooks/priority/nn span 2
-# Or add to ~/.bashrc: alias nn='~/.task/hooks/priority/nn'
-alias.nn=exec sh -c '~/.task/hooks/priority/nn'
+# To use nn with arguments, call directly: ~/.task/scripts/nn span 2
+# Or add to ~/.bashrc: alias nn='~/.task/scripts/nn'
+alias.nn=exec sh -c '~/.task/scripts/nn'
