@@ -1,0 +1,56 @@
+========================================================================
+make-awesome.sh --debug Session - 2026-01-25 12:43:02
+Session ID: 20260125_124302
+========================================================================
+
+[12:43:02] Scanning for Python files in current directory...
+[12:43:02] Found 5 Python file(s): migrate_priority.py nn.py on-add_priority.py on-exit_priority.py on-modify_priority.py
+[12:43:02] Processing: migrate_priority.py
+[12:43:02]   Generating debug version...
+[make] Creating debug version: debug.migrate_priority.py
+DEBUG: Parsed 146 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 22 lines
+DEBUG: Imports: 4 lines
+DEBUG: Rest: 118 lines
+[make] ✓ Created: debug.migrate_priority.py
+[12:43:02] Processing: nn.py
+[12:43:02]   Generating debug version...
+[make] Creating debug version: debug.nn.py
+DEBUG: Parsed 477 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 39 lines
+DEBUG: Imports: 4 lines
+DEBUG: Rest: 432 lines
+[make] ✓ Created: debug.nn.py
+[12:43:02] Processing: on-add_priority.py
+[12:43:02]   Generating debug version...
+[make] Creating debug version: debug.on-add_priority.py
+DEBUG: Parsed 253 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 31 lines
+DEBUG: Imports: 6 lines
+DEBUG: Rest: 214 lines
+[make] ✓ Created: debug.on-add_priority.py
+[12:43:02] Processing: on-exit_priority.py
+[12:43:02]   Generating debug version...
+[make] Creating debug version: debug.on-exit_priority.py
+DEBUG: Parsed 144 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 15 lines
+DEBUG: Imports: 5 lines
+DEBUG: Rest: 122 lines
+[make] ✓ Created: debug.on-exit_priority.py
+[12:43:02] Processing: on-modify_priority.py
+[12:43:02]   Generating debug version...
+[make] Creating debug version: debug.on-modify_priority.py
+DEBUG: Parsed 282 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 27 lines
+DEBUG: Imports: 5 lines
+DEBUG: Rest: 248 lines
+[make] ✓ Created: debug.on-modify_priority.py
+
+========================================================================
+Session completed: 2026-01-25 12:43:02
+========================================================================
