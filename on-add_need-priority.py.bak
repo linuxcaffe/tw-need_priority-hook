@@ -15,9 +15,9 @@ import subprocess
 from datetime import datetime
 
 # Configuration
-TASK_DIR = os.path.expanduser("~/.task")
-LOG_DIR = os.path.join(TASK_DIR, "logs", "need-priority")
-CONFIG_FILE = os.path.join(TASK_DIR, "config", "need.rc")
+HOOK_DIR = os.path.expanduser("~/.task/hooks/priority")
+LOG_DIR = os.path.join(HOOK_DIR, "logs")
+CONFIG_FILE = os.path.join(HOOK_DIR, "need.rc")
 LOG_FILE = os.path.join(LOG_DIR, "on-add.log")
 
 def log(message):

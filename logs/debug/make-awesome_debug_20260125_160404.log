@@ -1,0 +1,38 @@
+========================================================================
+make-awesome.sh --debug Session - 2026-01-25 16:04:04
+Session ID: 20260125_160404
+========================================================================
+
+[16:04:04] Scanning for Python files in current directory...
+[16:04:04] Found 3 Python file(s): on-add_need-priority.py on-exit_need-priority.py on-modify_need-priority.py
+[16:04:04] Processing: on-add_need-priority.py
+[16:04:04]   Generating debug version...
+[make] Creating debug version: debug.on-add_need-priority.py
+DEBUG: Parsed 253 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 7 lines
+DEBUG: Imports: 6 lines
+DEBUG: Rest: 238 lines
+[make] ✓ Created: debug.on-add_need-priority.py
+[16:04:04] Processing: on-exit_need-priority.py
+[16:04:04]   Generating debug version...
+[make] Creating debug version: debug.on-exit_need-priority.py
+DEBUG: Parsed 144 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 9 lines
+DEBUG: Imports: 5 lines
+DEBUG: Rest: 128 lines
+[make] ✓ Created: debug.on-exit_need-priority.py
+[16:04:04] Processing: on-modify_need-priority.py
+[16:04:04]   Generating debug version...
+[make] Creating debug version: debug.on-modify_need-priority.py
+DEBUG: Parsed 282 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 7 lines
+DEBUG: Imports: 5 lines
+DEBUG: Rest: 268 lines
+[make] ✓ Created: debug.on-modify_need-priority.py
+
+========================================================================
+Session completed: 2026-01-25 16:04:04
+========================================================================

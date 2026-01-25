@@ -1,0 +1,55 @@
+========================================================================
+make-awesome.sh v2.0.0 --debug Session - 2026-01-25 16:24:36
+Session ID: 20260125_162436
+========================================================================
+
+[16:24:36] [v2.0.0] Scanning for Python files in current directory...
+[16:24:36] [v2.0.0] Found 4 Python file(s): on-add_need-priority.py on-exit_need-priority.py on-modify_need-priority.py nn
+[16:24:36] [v2.0.0] Processing: on-add_need-priority.py
+[16:24:36] [v2.0.0]   Generating debug version...
+[make] Creating debug version: debug.on-add_need-priority.py
+DEBUG: Parsed 253 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 7 lines
+DEBUG: Imports: 6 lines
+DEBUG: Rest: 238 lines
+[make] ✓ Created: debug.on-add_need-priority.py
+[16:24:36] [v2.0.0]   Backing up: on-add_need-priority.py -> on-add_need-priority.py.orig
+[16:24:36] [v2.0.0]   Promoting: debug.on-add_need-priority.py -> on-add_need-priority.py
+[16:24:36] [v2.0.0] Processing: on-exit_need-priority.py
+[16:24:36] [v2.0.0]   Generating debug version...
+[make] Creating debug version: debug.on-exit_need-priority.py
+DEBUG: Parsed 144 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 9 lines
+DEBUG: Imports: 5 lines
+DEBUG: Rest: 128 lines
+[make] ✓ Created: debug.on-exit_need-priority.py
+[16:24:36] [v2.0.0]   Backing up: on-exit_need-priority.py -> on-exit_need-priority.py.orig
+[16:24:36] [v2.0.0]   Promoting: debug.on-exit_need-priority.py -> on-exit_need-priority.py
+[16:24:36] [v2.0.0] Processing: on-modify_need-priority.py
+[16:24:36] [v2.0.0]   Generating debug version...
+[make] Creating debug version: debug.on-modify_need-priority.py
+DEBUG: Parsed 282 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 7 lines
+DEBUG: Imports: 5 lines
+DEBUG: Rest: 268 lines
+[make] ✓ Created: debug.on-modify_need-priority.py
+[16:24:36] [v2.0.0]   Backing up: on-modify_need-priority.py -> on-modify_need-priority.py.orig
+[16:24:36] [v2.0.0]   Promoting: debug.on-modify_need-priority.py -> on-modify_need-priority.py
+[16:24:36] [v2.0.0] Processing: nn
+[16:24:36] [v2.0.0]   Generating debug version...
+[make] Creating debug version: debug.nn
+DEBUG: Parsed 477 lines
+DEBUG: Shebang: yes
+DEBUG: Docstring: 20 lines
+DEBUG: Imports: 4 lines
+DEBUG: Rest: 451 lines
+[make] ✓ Created: debug.nn
+[16:24:36] [v2.0.0]   Backing up: nn -> nn.orig
+[16:24:36] [v2.0.0]   Promoting: debug.nn -> nn
+
+========================================================================
+Session completed: 2026-01-25 16:24:36
+========================================================================
