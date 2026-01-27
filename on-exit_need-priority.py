@@ -19,7 +19,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Debug configuration
-DEBUG_MODE = 0  # Set to 1 to enable debug output
+DEBUG_MODE = 1  # Set to 1 to enable debug output
 
 # Check if running under tw --debug
 tw_debug_level = os.environ.get('TW_DEBUG', '0')
@@ -90,9 +90,9 @@ import subprocess
 
 
 # Configuration
-HOOK_DIR = os.path.expanduser("~/.task/hooks/priority")
-LOG_DIR = os.path.join(HOOK_DIR, "logs")
-CONFIG_FILE = os.path.join(HOOK_DIR, "need.rc")
+TASK_DIR = os.path.expanduser("~/.task")
+LOG_DIR = os.path.join(TASK_DIR, "logs/debug")
+CONFIG_FILE = os.path.join(TASK_DIR, "config", "need.rc")
 LOG_FILE = os.path.join(LOG_DIR, "on-exit.log")
 
 def log(message):

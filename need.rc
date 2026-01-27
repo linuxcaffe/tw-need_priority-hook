@@ -39,7 +39,7 @@ priority.5.auto=+creative,+art,+music,+writing,proj:creative,proj:personal
 priority.6.auto=+goals,+dreams,+legacy,proj:goals,proj:vision
 
 # Context span setting - how many priority levels to show above minimum
-priority.span=$[priority.span]
+priority.span=3
 
 # Due/scheduled lookahead - always show tasks due/scheduled soon
 # Format: <number><unit> where unit = d(ays), w(eeks), m(onths), y(ears)

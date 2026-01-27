@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-nn.py - Priority hierarchy management for Taskwarrior (Needs Navigator)
+nn - Priority hierarchy management for Taskwarrior (Needs Navigator)
 Part of tw-priority-hook project
 
+version 0.0.2
 The hooks automatically maintain context.need.read in need.rc.
 This script shows the current state, adjusts configuration, and helps review/assign priorities.
 
@@ -13,10 +14,10 @@ Usage:
     nn review         - Review and assign priorities to tasks
 
 NOTE: Due to taskwarrior alias limitations, you must call nn directly:
-    ~/.task/hooks/priority/nn.py span 2
+    ~/.task/scripts/nn span 2
     
 Or create a shell alias in your ~/.bashrc:
-    alias nn='~/.task/hooks/priority/nn.py'
+    alias nn='~/.task/scripts/nn'
 Then use: nn span 2
 """
 
@@ -26,11 +27,11 @@ import subprocess
 import json
 
 # Configuration
-HOOK_DIR = os.path.expanduser("~/.task/hooks/priority")
-CONFIG_FILE = os.path.join(HOOK_DIR, "need.rc")
+CONFIG_DIR = os.path.expanduser("~/.task/config")
+CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
 
 # Debug mode - set to 1 to enable debug output
-DEBUG = 0
+DEBUG = 1
 
 def debug_print(msg):
     """Print debug message if DEBUG is enabled"""
