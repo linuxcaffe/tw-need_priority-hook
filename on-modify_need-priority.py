@@ -89,7 +89,6 @@ import subprocess
 
 # Configuration
 TASK_DIR = os.path.expanduser("~/.task")
-TASK_DIR = os.path.expanduser("~/.task")
 CONFIG_DIR = os.path.expanduser("~/.task/config")
 CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
 LOG_DIR = os.path.join(TASK_DIR, "logs/debug")
