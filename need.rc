@@ -1,11 +1,11 @@
 # need.rc - Priority-based filtering configuration
 # Include in .taskrc with: include ~/.task/config/need.rc
+# version 0.4.2
 
 # UDA Definition
 uda.priority.type=string
 uda.priority.label=Priority
 uda.priority.values=1,2,3,4,5,6
-uda.priority.default=4
 
 # Urgency coefficients (higher priority = more urgent)
 urgency.uda.priority.1.coefficient=20.0

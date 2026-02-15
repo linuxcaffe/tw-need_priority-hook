@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-## version 0.4.0
+# version 0.4.2
 """
 on-add_priority.py - Automatic priority assignment hook
 Part of tw-priority-hook project
@@ -167,6 +167,18 @@ def get_config_value(key, default=None):
         pass
     return default
 
+def get_rc_value(key, default=None):
+    """Read configuration value via task _get rc.<key>"""
+    try:
+        result = subprocess.run(
+            ['task', 'rc.hooks=off', '_get', f'rc.{key}'],
+            capture_output=True, text=True
+        )
+        value = result.stdout.strip()
+        return value if value else default
+    except:
+        return default
+
 def get_lowest_priority(new_task_priority=None):
     """
     Find the lowest priority level with pending tasks
@@ -226,9 +238,9 @@ def update_context_in_config(new_task_priority=None):
             log("No pending tasks, clearing context filter")
             filter_expr = ""
         else:
-            span = get_config_value('span', '2')
-            lookahead = get_config_value('lookahead', '2d')
-            lookback = get_config_value('lookback', '1w')
+            span = get_rc_value('span', '2')
+            lookahead = get_rc_value('lookahead', '2d')
+            lookback = get_rc_value('lookback', '1w')
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
             log(f"Lowest priority: {lowest}, filter: {filter_expr}")
         
