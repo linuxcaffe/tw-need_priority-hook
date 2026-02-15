@@ -39,15 +39,15 @@ priority.5.auto=+creative,+art,+music,+writing,proj:creative,proj:personal
 priority.6.auto=+goals,+dreams,+legacy,proj:goals,proj:vision
 
 # Context span setting - how many priority levels to show above minimum
-priority.span=3
+span=3
 
 # Due/scheduled lookahead - always show tasks due/scheduled soon
 # Format: <number><unit> where unit = d(ays), w(eeks), m(onths), y(ears)
-priority.lookahead=2d
+lookahead=2d
 
 # Due/scheduled lookback - constrain context to exclude old overdue tasks
 # Format: <number><unit> where unit = d(ays), w(eeks), m(onths), y(ears)
-priority.lookback=1w
+lookback=1w
 
 # Context definition (auto-maintained by hooks)
 # Uses pri.after:N syntax where pri.after:3 shows pri:1 and pri:2

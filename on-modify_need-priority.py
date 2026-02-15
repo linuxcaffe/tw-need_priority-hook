@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+## version 0.4.0
 """
-on-modify_priority.py - Validate and enforce priority requirements
+on-add_priority.py - Automatic priority assignment hook
 Part of tw-priority-hook project
 
-Ensures priority is always set on task modifications.
-Prevents clearing or setting invalid priority values.
+Automatically assigns priority based on tags, projects, and description
+patterns defined in need.rc auto-assignment rules.
 """
 
 # ============================================================================
@@ -47,7 +48,7 @@ def get_log_dir():
 if debug_active:
     DEBUG_LOG_DIR = get_log_dir()
     DEBUG_SESSION_ID = datetime.now().strftime("%Y%m%d_%H%M%S")
-    DEBUG_LOG_FILE = DEBUG_LOG_DIR / f"on-modify_need-priority.py_debug_{DEBUG_SESSION_ID}.log"
+    DEBUG_LOG_FILE = DEBUG_LOG_DIR / f"on-add_need-priority.py_debug_{DEBUG_SESSION_ID}.log"
     
     def debug_log(message, level=1):
         """Write debug message to log file and stderr"""
@@ -67,7 +68,7 @@ if debug_active:
     with open(DEBUG_LOG_FILE, 'w') as f:
         f.write("=" * 70 + "\n")
         f.write(f"Debug Session - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write(f"Script: on-modify_need-priority.py\n")
+        f.write(f"Script: on-add_need-priority.py\n")
         f.write(f"Debug Mode: {DEBUG_MODE}\n")
         f.write(f"TW_DEBUG Level: {tw_debug_level}\n")
         f.write(f"Session ID: {DEBUG_SESSION_ID}\n")
@@ -80,6 +81,7 @@ else:
         pass
 
 import json
+import re
 import subprocess
 
 # ============================================================================
@@ -90,12 +92,9 @@ import subprocess
 # Configuration
 TASK_DIR = os.path.expanduser("~/.task")
 CONFIG_DIR = os.path.expanduser("~/.task/config")
-CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
+CONFIG_FILE = os.path.join(TASK_DIR, "config", "need.rc")
 LOG_DIR = os.path.join(TASK_DIR, "logs/debug")
-LOG_FILE = os.path.join(LOG_DIR, "on-modify.log")
-
-VALID_PRIORITIES = ['1', '2', '3', '4', '5', '6']
-DEFAULT_PRIORITY = '4'
+LOG_FILE = os.path.join(LOG_DIR, "on-add.log")
 
 def log(message):
     """Write to hook log file"""
@@ -106,6 +105,55 @@ def log(message):
             f.write(f"[{timestamp}] {message}\n")
     except Exception as e:
         print(f"LOG ERROR: {e}", file=sys.stderr)
+
+def parse_auto_rules(config_file):
+    """
+    Parse priority.N.auto rules from need.rc
+    Returns dict: {priority_level: [filter1, filter2, ...]}
+    """
+    rules = {}
+    try:
+        with open(config_file, 'r') as f:
+            for line in f:
+                line = line.strip()
+                # Match: priority.N.auto=filter,filter,filter
+                match = re.match(r'^priority\.([1-6])\.auto=(.+)$', line)
+                if match:
+                    level = match.group(1)
+                    filters = [f.strip() for f in match.group(2).split(',')]
+                    rules[level] = filters
+    except Exception as e:
+        log(f"ERROR parsing config: {e}")
+        return {}
+    
+    return rules
+
+def task_matches_filter(task, filter_expr):
+    """
+    Check if task matches a filter expression
+    Supports: +tag, proj:name, proj.has:name, desc.has:text
+    """
+    # Tag match: +tag
+    if filter_expr.startswith('+'):
+        tag = filter_expr[1:]
+        return tag in task.get('tags', [])
+    
+    # Project exact match: proj:name
+    if filter_expr.startswith('proj:'):
+        proj = filter_expr[5:]
+        return task.get('project', '') == proj
+    
+    # Project contains: proj.has:name
+    if filter_expr.startswith('proj.has:'):
+        proj = filter_expr[9:]
+        return proj in task.get('project', '')
+    
+    # Description contains: desc.has:text
+    if filter_expr.startswith('desc.has:'):
+        text = filter_expr[9:]
+        return text.lower() in task.get('description', '').lower()
+    
+    return False
 
 def get_config_value(key, default=None):
     """Read configuration value from need.rc"""
@@ -119,18 +167,15 @@ def get_config_value(key, default=None):
         pass
     return default
 
-def get_lowest_priority_with_change(exclude_uuid=None, new_priority=None):
+def get_lowest_priority(new_task_priority=None):
     """
     Find the lowest priority level with pending tasks
-    Takes into account a task that's changing priority (not yet in DB)
-    
-    exclude_uuid: UUID of task being modified (still at old priority in DB)
-    new_priority: The new priority level this task will have
+    new_task_priority: Consider a task being added (not yet in database)
     """
     try:
-        log(f"get_lowest_priority_with_change: exclude_uuid={exclude_uuid}, new_priority={new_priority}")
-        
+        # Check each priority level
         for level in ['1', '2', '3', '4', '5', '6']:
+            # Count existing tasks at this level
             result = subprocess.run(
                 ['task', 'rc.hooks=off', f'priority:{level}', 'status:pending', 'count'],
                 capture_output=True,
@@ -140,75 +185,12 @@ def get_lowest_priority_with_change(exclude_uuid=None, new_priority=None):
             if result.returncode == 0:
                 count = int(result.stdout.strip() or 0)
             
-            log(f"  Priority {level}: {count} tasks (DB)")
-            
-            # If we're excluding a task at this level, decrement count
-            if exclude_uuid and count > 0:
-                check_result = subprocess.run(
-                    ['task', 'rc.hooks=off', f'uuid:{exclude_uuid}', f'priority:{level}', 'count'],
-                    capture_output=True,
-                    text=True
-                )
-                if check_result.returncode == 0:
-                    exclude_count = int(check_result.stdout.strip() or 0)
-                    if exclude_count > 0:
-                        log(f"    Excluding {exclude_count} task(s) at level {level} (old priority)")
-                        count -= exclude_count
-            
-            # If this is the new priority level, add 1 for the task being moved here
-            if new_priority and level == new_priority:
-                log(f"    Adding 1 task at level {level} (new priority)")
+            # Consider new task being added
+            if new_task_priority == level:
                 count += 1
             
-            log(f"  Priority {level}: {count} tasks (adjusted)")
-            
             if count > 0:
-                log(f"  Returning lowest priority: {level}")
                 return level
-        
-        log("  No tasks found, returning None")
-    except Exception as e:
-        log(f"Error getting lowest priority: {e}")
-    return None
-
-def get_lowest_priority(exclude_uuid=None):
-    """
-    Find the lowest priority level with pending tasks
-    exclude_uuid: UUID of task to exclude (being deleted/completed)
-    """
-    try:
-        log(f"get_lowest_priority called, exclude_uuid={exclude_uuid}")
-        for level in ['1', '2', '3', '4', '5', '6']:
-            result = subprocess.run(
-                ['task', 'rc.hooks=off', f'priority:{level}', 'status:pending', 'count'],
-                capture_output=True,
-                text=True
-            )
-            count = 0
-            if result.returncode == 0:
-                count = int(result.stdout.strip() or 0)
-            
-            log(f"  Priority {level}: {count} tasks")
-            
-            # If we're excluding a task at this level, decrement count
-            if exclude_uuid and count > 0:
-                # Check if the excluded task is at this level
-                check_result = subprocess.run(
-                    ['task', 'rc.hooks=off', f'uuid:{exclude_uuid}', f'priority:{level}', 'count'],
-                    capture_output=True,
-                    text=True
-                )
-                if check_result.returncode == 0:
-                    exclude_count = int(check_result.stdout.strip() or 0)
-                    if exclude_count > 0:
-                        log(f"    Excluding {exclude_count} task(s) at level {level}")
-                    count -= exclude_count
-            
-            if count > 0:
-                log(f"  Returning lowest priority: {level}")
-                return level
-        
-        log("  No tasks found, returning None")
     except Exception as e:
         log(f"Error getting lowest priority: {e}")
     return None
@@ -233,28 +215,22 @@ def build_context_filter(min_priority, span, lookahead, lookback):
     
     return f"{pri_expr} or {due_expr} or {sched_expr}"
 
-def update_context_in_config(exclude_uuid=None, new_priority=None):
+def update_context_in_config(new_task_priority=None):
     """
     Update context.needs.read in need.rc based on current lowest priority
-    exclude_uuid: UUID of task to exclude (being deleted/completed/moved)
-    new_priority: New priority level for the excluded task (if being moved)
+    new_task_priority: Consider a task being added (not yet in database)
     """
     try:
-        # If we have both exclude and new_priority, use the specialized function
-        if exclude_uuid and new_priority:
-            lowest = get_lowest_priority_with_change(exclude_uuid, new_priority)
-        else:
-            lowest = get_lowest_priority(exclude_uuid)
-        
+        lowest = get_lowest_priority(new_task_priority)
         if not lowest:
             log("No pending tasks, clearing context filter")
             filter_expr = ""
         else:
-            span = get_config_value('priority.span', '2')
-            lookahead = get_config_value('priority.lookahead', '2d')
-            lookback = get_config_value('priority.lookback', '1w')
+            span = get_config_value('span', '2')
+            lookahead = get_config_value('lookahead', '2d')
+            lookback = get_config_value('lookback', '1w')
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
-            log(f"Lowest priority (excluding {exclude_uuid}, new={new_priority}): {lowest}, filter: {filter_expr}")
+            log(f"Lowest priority: {lowest}, filter: {filter_expr}")
         
         # Update need.rc
         lines = []
@@ -280,68 +256,64 @@ def update_context_in_config(exclude_uuid=None, new_priority=None):
         log(f"Error updating context: {e}")
         return False
 
+def determine_priority(task, rules):
+    """
+    Determine priority based on auto-assignment rules
+    Returns priority level (1-6) or None if no match
+    """
+    # Check each priority level in order (1-6)
+    for level in ['1', '2', '3', '4', '5', '6']:
+        if level not in rules:
+            continue
+        
+        filters = rules[level]
+        for filter_expr in filters:
+            if task_matches_filter(task, filter_expr):
+                log(f"Matched '{filter_expr}' -> pri:{level}")
+                return level
+    
+    return None
+
 def main():
     """Hook entry point"""
     try:
-        # Read original and modified task
-        original_json = sys.stdin.readline()
-        modified_json = sys.stdin.readline()
+        # Read new task from stdin
+        task_json = sys.stdin.readline()
+        task = json.loads(task_json)
         
-        original = json.loads(original_json)
-        modified = json.loads(modified_json)
+        log(f"Processing task: {task.get('description', 'NO DESC')}")
         
-        desc = modified.get('description', 'NO DESC')[:50]
+        # Check if priority already set by user
+        if 'priority' in task and task['priority']:
+            log(f"Priority already set to {task['priority']}")
+            print(json.dumps(task))
+            update_context_in_config(task['priority'])
+            return 0
         
-        # Check if task is being deleted or completed
-        is_deletion = modified.get('status') == 'deleted'
-        is_completion = modified.get('status') == 'completed'
+        # Parse auto-assignment rules
+        rules = parse_auto_rules(CONFIG_FILE)
+        assigned_priority = None
         
-        # Check if priority changed
-        old_priority = original.get('priority', '')
-        new_priority = modified.get('priority', '')
-        priority_changed = old_priority != new_priority
+        if rules:
+            # Try auto-assignment based on rules
+            assigned_priority = determine_priority(task, rules)
+            
+        if assigned_priority:
+            # Auto-assignment succeeded - silent
+            task['priority'] = assigned_priority
+            log(f"Auto-assigned priority: {assigned_priority}")
+        else:
+            # No auto-match - use default (user can change later)
+            task['priority'] = '4'
+            log("No rule matched, using default pri:4")
         
-        log(f"=== ON-MODIFY: {desc} ===")
-        log(f"Original status: {original.get('status')}, Modified status: {modified.get('status')}")
-        log(f"Original priority: '{old_priority}', Modified priority: '{new_priority}'")
-        log(f"Priority changed: {priority_changed}")
-        log(f"Old in VALID: {old_priority in VALID_PRIORITIES}, New in VALID: {new_priority in VALID_PRIORITIES}")
-        log(f"Is deletion: {is_deletion}, Is completion: {is_completion}")
-        
-        # Check if priority was removed
-        if 'priority' not in modified or not modified['priority']:
-            if not is_deletion:  # Don't enforce priority on deletions
-                log(f"Priority missing on modify, restoring to default: {desc}")
-                modified['priority'] = DEFAULT_PRIORITY
-        
-        # Validate priority value
-        elif modified['priority'] not in VALID_PRIORITIES:
-            old_pri = modified['priority']
-            log(f"Invalid priority '{old_pri}', setting to default: {desc}")
-            modified['priority'] = DEFAULT_PRIORITY
+        log(f"Final priority: {task['priority']}")
         
         # Output modified task
-        print(json.dumps(modified))
+        print(json.dumps(task))
         
-        # Update context filter in background
-        # CRITICAL: At this point, the database still has the OLD priority!
-        # The change hasn't been committed yet. We need to account for this.
-        
-        if is_deletion or is_completion:
-            log(f"Task {'deleted' if is_deletion else 'completed'}, updating context (excluding UUID)")
-            # Task is leaving - exclude it from counts
-            update_context_in_config(modified.get('uuid'), None)
-        elif priority_changed and old_priority in VALID_PRIORITIES and new_priority in VALID_PRIORITIES:
-            # Priority changed - database still shows old priority
-            # We simulate: remove from old_priority, add to new_priority
-            log(f"Priority changed from {old_priority} to {new_priority}")
-            log(f"Database still shows task at pri:{old_priority}")
-            log(f"Simulating move: exclude from {old_priority}, add to {new_priority}")
-            # Pass both UUID (to exclude from old level) and new priority (to add to new level)
-            update_context_in_config(modified.get('uuid'), new_priority)
-        else:
-            log(f"Regular modification (no priority change), updating context")
-            update_context_in_config(None, None)
+        # Update context filter, considering this new task
+        update_context_in_config(task['priority'])
         
         return 0
         
@@ -349,8 +321,8 @@ def main():
         log(f"FATAL ERROR: {e}")
         import traceback
         log(traceback.format_exc())
-        # On error, output modified task unchanged
-        print(modified_json)
+        # On error, output original task unchanged
+        print(task_json)
         return 1
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+## version 0.4.0
 """
 on-exit_priority.py - Update context filter on task completion
 Part of tw-priority-hook project
@@ -91,7 +92,7 @@ import subprocess
 
 # Configuration
 TASK_DIR = os.path.expanduser("~/.task")
-CONFIG_DIR = os.path.join(TASK_DIR, "logs/config")
+CONFIG_DIR = os.path.join(TASK_DIR, "config")
 CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
 LOG_DIR = os.path.join(TASK_DIR, "logs/debug")
 LOG_FILE = os.path.join(LOG_DIR, "on-exit.log")
@@ -153,7 +154,7 @@ def build_context_filter(min_priority, span, lookahead, lookback):
     due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
     sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
     
-    return f"{pri_expr} or {sched_expr} or {due_expr}"
+    return f"{pri_expr} or {due_expr} or {sched_expr}"
 
 def update_context_in_config():
     """Update context.need.read in need.rc based on current lowest priority"""
@@ -163,9 +164,9 @@ def update_context_in_config():
             log("No pending tasks, clearing context filter")
             filter_expr = ""
         else:
-            span = get_config_value('priority.span', '2')
-            lookahead = get_config_value('priority.lookahead', '2d')
-            lookback = get_config_value('priority.lookback', '1w')
+            span = get_config_value('span', '2')
+            lookahead = get_config_value('lookahead', '2d')
+            lookback = get_config_value('lookback', '1w')
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
             log(f"Lowest priority: {lowest}, filter: {filter_expr}")
         

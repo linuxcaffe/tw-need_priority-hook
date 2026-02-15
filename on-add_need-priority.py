@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+## version 0.4.0
 """
 on-add_priority.py - Automatic priority assignment hook
 Part of tw-priority-hook project
@@ -225,9 +226,9 @@ def update_context_in_config(new_task_priority=None):
             log("No pending tasks, clearing context filter")
             filter_expr = ""
         else:
-            span = get_config_value('priority.span', '2')
-            lookahead = get_config_value('priority.lookahead', '2d')
-            lookback = get_config_value('priority.lookback', '1w')
+            span = get_config_value('span', '2')
+            lookahead = get_config_value('lookahead', '2d')
+            lookback = get_config_value('lookback', '1w')
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
             log(f"Lowest priority: {lowest}, filter: {filter_expr}")
         
