@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# version 0.4.4
+# version 0.4.5
 """
 on-add_priority.py - Automatic priority assignment hook
 Part of tw-priority-hook project

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# version 0.4.4
+# version 0.4.5
 """
 on-exit_priority.py - Update context filter on task completion
 Part of tw-priority-hook project

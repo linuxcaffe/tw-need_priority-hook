@@ -1,302 +1,192 @@
 # tw-need_priority-hook
-# v0.3.5
+# v0.4.5
 
-Priority-based task filtering for Taskwarrior based on Maslow's hierarchy of needs.
+Priority-based task filtering for Taskwarrior, inspired by Maslow's hierarchy of needs.
 
-## Overview
+---
 
-Automatically assigns and filters tasks based on a 6-level priority hierarchy:
+## TL;DR
 
-1. **Physiological** - Air, water, food, shelter, medical
-2. **Safety** - Security, health, financial stability  
-3. **Love & Belonging** - Friends, family, relationships
-4. **Esteem** - Respect, recognition, achievements
-5. **Self-Actualization** - Personal growth, creativity
-6. **Higher Goals** - Life purpose, legacy
+- Every task gets a 1–6 priority based on Maslow's hierarchy
+- Auto-assigns priority on add, based on tags/projects/description
+- Dynamic context filter shows only what matters most right now
+- `nn` companion script for status, review, and configuration
+- Designed for Taskwarrior 2.6.2
 
-## Features
+---
 
-- **Auto-assignment**: Tasks automatically get priority based on tags/projects
-  - If task matches an auto-rule → priority assigned silently
-  - If task has `priority:N` already → kept as-is
-  - If no match and no priority → defaults to pri:4 (user can change)
-- **Priority effectively required**: Every task gets a priority (no blank values)
-- **Dynamic context**: Shows only most important tasks (configurable span)
-- **Smart lookahead**: Always shows upcoming due/scheduled tasks
-- **Smart lookback**: Excludes ancient overdue tasks from context
-- **Visual report**: Pyramid display of task distribution
-- **Urgency integration**: Higher priorities boost urgency scores
+## Why this exists
+
+You won't achieve self-actualization if you're behind on bills. Taskwarrior
+tracks everything equally — this hook enforces a hierarchy, so you focus on
+what matters most right now while still planning for bigger goals.
+
+Based on the original [tw-needs-hook](https://github.com/linuxcaffe/tw-needs-hook)
+by linuxcaffe.
+
+---
+
+## Core concepts
+
+- **Priority levels (1–6)**
+  Mapped to Maslow's hierarchy, from physiological needs (1) to higher goals (6).
+
+- **Auto-assignment**
+  Tasks get priority automatically based on tags, projects, and description
+  patterns defined in `need.rc`. No match defaults to pri:4.
+
+- **Span**
+  How many priority levels to show at once. With span=2 and lowest tasks at
+  pri:2, you see pri:2 and pri:3. Also supports ranges like `2-4`.
+
+- **Lookahead / Lookback**
+  Always show tasks due or scheduled within the lookahead window. Exclude
+  ancient overdue tasks beyond the lookback window.
+
+- **Context filter**
+  `context.need.read` in `need.rc` is auto-maintained by hooks. Activate it
+  with `task context need`, deactivate with `task context none`.
+
+---
+
+## The six levels
+```
+      /               Higher Goals               \        (6)
+     /             Self Actualization             \       (5)
+    /         Esteem, Respect & Recognition        \      (4) ← default
+   /       Love & Belonging, Friends & Family       \     (3)
+  /   Personal safety, security, health, financial   \    (2)
+ /      Physiological; Air, Water, Food & Shelter     \   (1)
+```
+
+---
 
 ## Installation
+```bash
+# Copy hooks and config
+cp on-add_need-priority.py ~/.task/hooks/
+cp on-exit_need-priority.py ~/.task/hooks/
+cp nn ~/.task/scripts/nn
+cp need.rc ~/.task/config/
 
-### First-Time Setup
+# Make executable
+chmod +x ~/.task/hooks/on-add_need-priority.py
+chmod +x ~/.task/hooks/on-exit_need-priority.py
+chmod +x ~/.task/scripts/nn
 
-1. **Migrate existing priorities (if needed):**
-   ```bash
-   # Preview migration from H/M/L to numeric
-   python3 ~/.task/hooks/priority/migrate_priority.py --dry-run
-   
-   # Perform migration (default: H->2, M->4, L->5)
-   python3 ~/.task/hooks/priority/migrate_priority.py
-   
-   # Custom mapping if desired
-   python3 ~/.task/hooks/priority/migrate_priority.py --mapping H:1,M:3,L:6
-   ```
+# Include config in .taskrc
+echo 'include ~/.task/config/need.rc' >> ~/.taskrc
 
-2. **Copy files:**
-   ```bash
-   # Project is in ~/.task/hooks/priority/
-   ```
+# Optional: shell alias for nn with arguments
+echo "alias nn='~/.task/scripts/nn'" >> ~/.bashrc
+```
 
-3. **Create symlinks:**
-   ```bash
-   ln -s ~/.task/hooks/priority/on-add_priority.py ~/.task/hooks/
-   ln -s ~/.task/hooks/priority/on-modify_priority.py ~/.task/hooks/
-   ln -s ~/.task/hooks/priority/on-exit_priority.py ~/.task/hooks/
-   ln -s ~/.task/hooks/priority/nn.py ~/.task/scripts/nn
-   ```
-
-4. **Include configuration:**
-   Add to `~/.taskrc`:
-   ```
-   include ~/.task/hooks/priority/need.rc
-   ```
-   
-   This provides:
-   - UDA definition for priority
-   - Auto-assignment rules
-   - Urgency coefficients
-   - Context definition (auto-maintained by hooks)
-   - Command alias: `task nn` (Needs Navigator)
-
-5. **Add scripts to PATH** (optional alternative to alias):
-   ```bash
-   export PATH="$PATH:$HOME/.task/scripts"
-   ```
+---
 
 ## Configuration
 
-Edit `need.rc` to customize auto-assignment rules:
-
+Edit `need.rc` to customize:
 ```
-# Automatically assign pri:1 to tasks with these attributes
-priority.1.auto=+meds,+oxygen,desc.has:hospital,proj:medical
+# Auto-assignment rules (first match wins, checked 1→6)
+priority.1.auto=+meds,+oxygen,desc.has:emergency,proj:medical
+priority.2.auto=+job,+bills,+rent,proj:financial
+priority.3.auto=+family,+friends,proj:relationships
+priority.4.auto=+work,+career,proj:education
+priority.5.auto=+creative,+art,+writing,proj:personal
+priority.6.auto=+goals,+dreams,proj:vision
 
-# Adjust context span (how many levels to show above minimum)
-priority.span=2
+# Context span — how many levels to show
+span=2
 
-# Due/scheduled lookahead (show upcoming tasks)
-# Format: <number><unit> where unit = d(ays), w(eeks), m(onths), y(ears)
-priority.lookahead=2d
-
-# Due/scheduled lookback (exclude old overdue tasks)
-# Format: <number><unit> where unit = d(ays), w(eeks), m(onths), y(ears)
-priority.lookback=1w
+# Due/scheduled lookahead and lookback
+lookahead=2d
+lookback=1w
 ```
 
-Examples of time formats:
-- `2d` = 2 days
-- `1w` = 1 week
-- `3m` = 3 months
-- `1y` = 1 year
+Supported filter types: `+tag`, `proj:name`, `proj.has:text`, `desc.has:text`
 
-### Auto-Assignment Rules
+Set span via: `nn span 3` or `nn span 2-4` (range)
 
-Rules are checked in priority order (1-6). First match wins.
-
-Supported filters:
-- `+tag` - Has tag
-- `proj:name` - Exact project match
-- `proj.has:name` - Project contains text
-- `desc.has:text` - Description contains text
+---
 
 ## Usage
-
-### Context Activation
-
-The `needs` script defines the context filter, but you control activation:
-
 ```bash
-# Define auto-context (happens automatically via hooks)
-# Just check status:
-task needs
-
-# Activate the context
-task context needs
-
-# Work with filtered tasks
-task list
-
-# Deactivate when you want to see everything
-task context none
-```
-
-### Companion Script Commands
-
-The `need.rc` file includes an alias for `nn` (Needs Navigator):
-
-```bash
-# Show priority report
-task nn
-
-# Review and assign priorities to tasks
-task nn review
-
-# Adjust span (context auto-updates on next task change)
-task nn span 3
-
-# Manually force context recalculation (if hooks missed an update)
-task nn update
-```
-
-Note: The alias passes arguments, so all commands work correctly.
-
-The hooks handle all context management automatically. Just use `task context needs` / `task context none` to control activation.
-
-## How Auto-Context Works
-
-The hooks automatically maintain `context.needs.read` in need.rc:
-
-**Automatic updates:**
-- When you add a task → on-add recalculates and updates filter
-- When you modify a task → on-modify recalculates and updates filter  
-- When you delete a task → on-modify detects deletion and updates filter
-- When you complete a task (`task done`) → on-exit updates filter
-
-**The filter is always current** - just activate when you want it:
-
-```bash
-task context need    # Use the automatically generated context.need.read filter
-task context none    # Stops all context filtering
-```
-
-With `priority.span=2`, `priority.lookahead=2d`, and `priority.lookback=1w`:
-
-1. **You have pri:1 tasks:**
-   ```
-   context.need.read=priority:1 or priority:2 or ( due.before:today+2d and due.after:today-1w ) or ( scheduled.before:today+2d and sched.after:today-1w )
-   ```
-   Shows: pri:1-2 tasks, plus tasks due/scheduled in the next 2 days (but not older than 1 week overdue)
-
-2. **All pri:1 tasks completed:**
-   - on-exit hook automatically updates to show pri:2-3 range
-
-3. **Check current state:**
-   ```bash
-   task nn  # Shows pyramid + current filter
-   ```
-
-### Example Workflow
-
-```bash
-# Add task with medical tag - auto-assigned pri:1
+# Add task — auto-assigned pri:1 based on +meds tag
 task add Get prescription refilled +meds
-# Hook automatically updates context.needs.read
 
-# Add task with bill tag - auto-assigned pri:2  
-task add Pay electricity bill +bills
+# Add task with explicit priority — kept as-is
+task add Critical deadline pri:1
 
-# Check current status
-task nn
+# Add unmatched task — defaults to pri:4
+task add Buy new headphones
 
-# Review and assign priorities to tasks that need them
-task nn review
+# Show priority pyramid and current filter
+nn
 
-# Activate the context
+# Review and assign priorities interactively
+nn review
+
+# Adjust span
+nn span 3
+
+# Manually recalculate context filter
+nn update
+
+# Activate/deactivate context
 task context need
-
-# View filtered list (only lowest priority levels + upcoming)
-task list
-
-# Complete high-priority task
-task 1 done
-# Hook automatically recalculates and updates filter
-
-# Still in context - now showing next priority level
-task list
-
-# Check what changed
-task nn
-
-# Temporarily see everything
 task context none
-task list
-
-# Back to filtered view
-task context need
 ```
 
-## Priority Report
+---
 
-```
-Priority Hierarchy Status
-======================================================================
+## How it works
 
-    6              Higher Goals                          (2)
-    5            Self Actualization                      (3)
-    4       Esteem, Respect & Recognition               (15)
-    3      Love & Belonging, Friends & Family           (24)
- -->2   Personal safety, security, health, financial    (8)
-    1     Physiological; Air, Water, Food & Shelter     (2)
+**on-add** checks the new task against auto-assignment rules. First match
+wins. If no match and no user-set priority, defaults to pri:4. Then
+recalculates and writes the context filter.
 
-Active context: need
-Filter: ( pri:1 or pri:2 or due.before:today+2d or scheduled.before:today+2d )
-```
+**on-exit** recalculates the context filter after task completion or deletion,
+so the filter adjusts as you clear lower-level tasks.
 
-## Manual Priority Assignment
+**nn** shows the priority pyramid, current configuration, and active filter.
+Also handles span changes, manual updates, and interactive review.
 
-You can always manually set or override priority:
+---
 
-```bash
-task add "Critical project deadline" pri:1
-task 42 mod pri:3
-```
+## Urgency integration
 
-## Integration with Urgency
+Higher priorities boost urgency scores (configured in `need.rc`):
 
-Priority levels boost urgency scores (configured in `need.rc`):
-- pri:1 = +10.0 urgency
-- pri:2 = +8.0 urgency
-- pri:3 = +6.0 urgency
-- pri:4 = +4.0 urgency
-- pri:5 = +2.0 urgency
-- pri:6 = +0.0 urgency
+| Priority | Coefficient |
+|----------|-------------|
+| 1        | +20.0       |
+| 2        | +16.0       |
+| 3        | +12.0       |
+| 4        | +8.0        |
+| 5        | +4.0        |
+| 6        | +0.0        |
+
+---
 
 ## Files
-
 ```
-~/.task/hooks/priority/
-├── need.rc                # Configuration (includes context.needs.read)
-├── need.py                # Status report script (aliased as 'task needs')
-├── on-add_priority.py     # Auto-assignment + context update
-├── on-modify_priority.py  # Validation + context update
-├── on-exit_priority.py    # Context update on completion/deletion
-├── migrate_priority.py    # Migration tool for H/M/L
-├── logs/                  # Hook execution logs
-│   ├── on-add.log
-│   ├── on-modify.log
-│   └── on-exit.log
-├── CHANGES.txt            # Version history
-├── README.md              # This file
-└── VERSION                # Current version
+on-add_need-priority.py    # Auto-assignment + context update
+on-exit_need-priority.py   # Context update on completion/deletion
+nn                         # Companion script (Needs Navigator)
+need.rc                    # Configuration + UDA + context definition
 ```
 
-## Philosophy
-
-Based on the original [tw-needs-hook](https://github.com/linuxcaffe/tw-needs-hook) by linuxcaffe.
-
-The priority hierarchy helps prevent distraction by higher-level tasks when lower-level needs aren't met. You can track everything, but only focus on what matters most right now.
-
-**Key insight:** You won't achieve self-actualization if you're behind on bills. The system enforces this reality while still letting you plan for bigger goals.
+---
 
 ## Compatibility
 
-- Requires Taskwarrior 2.6.2
+- Taskwarrior 2.6.2
 - Python 3.6+
-- For Taskwarrior 3.x support, submit a pull request
 
-## Version
+---
 
-Current version: 0.1.0
+## Project status
+
+⚠️ Active development — working and in daily use, but interfaces may change.
 
 See `CHANGES.txt` for version history.

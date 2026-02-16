@@ -3,7 +3,7 @@
 nn - Priority hierarchy management for Taskwarrior (Needs Navigator)
 Part of tw-priority-hook project
 
-version 0.4.4
+version 0.4.5
 The hooks automatically maintain context.need.read in need.rc.
 This script shows the current state, adjusts configuration, and helps review/assign priorities.
 
