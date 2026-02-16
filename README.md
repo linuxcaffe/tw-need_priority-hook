@@ -1,5 +1,7 @@
-# tw-need_priority-hook
-# v0.4.5
+- Project: https://github.com/linuxcaffe/tw-need_priority-hook
+- Issues: https://github.com/linuxcaffe/tw-need_priority-hook/issues
+
+# need-priority
 
 Priority-based task filtering for Taskwarrior, inspired by Maslow's hierarchy of needs.
 
@@ -19,10 +21,9 @@ Priority-based task filtering for Taskwarrior, inspired by Maslow's hierarchy of
 
 You won't achieve self-actualization if you're behind on bills. Taskwarrior
 tracks everything equally — this hook enforces a hierarchy, so you focus on
-what matters most right now while still planning for bigger goals.
+what matters most right now while still planning for bigger goals. 
+This hook helps you focus on the most vital tasks first. 
 
-Based on the original [tw-needs-hook](https://github.com/linuxcaffe/tw-needs-hook)
-by linuxcaffe.
 
 ---
 
@@ -62,6 +63,21 @@ by linuxcaffe.
 ---
 
 ## Installation
+### Option #1 - clone this repo and use the included install file
+```
+./need-priority.install
+```
+
+Copies hooks, scripts, rc file and README.md to correct directories under ~/.task
+
+### Option #2 - via [awesome-taskwarrior](https://github.com/linuxcaffe/awesome-taskwarrior)'s package manager
+
+```
+tw -I need-priority
+```
+
+### Option #3 - manual install
+
 ```bash
 # Copy hooks and config
 cp on-add_need-priority.py ~/.task/hooks/
@@ -189,4 +205,3 @@ need.rc                    # Configuration + UDA + context definition
 
 ⚠️ Active development — working and in daily use, but interfaces may change.
 
-See `CHANGES.txt` for version history.
