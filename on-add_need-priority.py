@@ -18,7 +18,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Debug configuration
-DEBUG_MODE = 1  # Set to 1 to enable debug output
+DEBUG_MODE = 0  # Set to 1 to enable debug output
 
 # Check if running under tw --debug
 tw_debug_level = os.environ.get('TW_DEBUG', '0')

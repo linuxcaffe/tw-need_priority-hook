@@ -37,16 +37,21 @@ priority.5.auto=+creative,+art,+music,+writing,proj:creative,proj:personal
 # Priority 6: Higher goals - life purpose, big dreams
 priority.6.auto=+goals,+dreams,+legacy,proj:goals,proj:vision
 
-# Context span setting - how many priority levels to show above minimum
-span=3
+# Context span setting - how many priority levels to show
+# Set with: task config span 3   (or nn span 3)
+# Range:    task config span 2-4 (or nn span 2-4)
+# Default: 2 (if not set)
+#span=3
 
 # Due/scheduled lookahead - always show tasks due/scheduled soon
 # Format: <number><unit> where unit = d(ays), w(eeks), m(onths), y(ears)
-lookahead=2d
+# Default: 2d (if not set)
+#lookahead=2d
 
 # Due/scheduled lookback - constrain context to exclude old overdue tasks
 # Format: <number><unit> where unit = d(ays), w(eeks), m(onths), y(ears)
-lookback=1w
+# Default: 1w (if not set)
+#lookback=1w
 
 # Context definition (auto-maintained by hooks)
 # Uses pri.after:N syntax where pri.after:3 shows pri:1 and pri:2
