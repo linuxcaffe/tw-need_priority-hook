@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# version 0.4.2
 """
 nn - Priority hierarchy management for Taskwarrior (Needs Navigator)
 Part of tw-priority-hook project
@@ -193,25 +192,45 @@ def get_lowest_priority():
     return None
 
 def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression using pri.after"""
-    min_pri = int(min_priority)
-    max_pri = min(min_pri + int(span) - 1, 6)
+    """Build context filter expression.
     
-    # Use pri.after:N to show priorities below N
-    # pri.after:3 shows pri:1 and pri:2
-    # So to show min_pri to max_pri, we use pri.after:(max_pri+1)
-    if max_pri < 6:
-        pri_expr = f"pri.after:{max_pri + 1}"
+    span can be:
+      "3"   - single digit: show 3 levels starting from min_priority
+      "2-4" - range: show exactly levels 2, 3, 4 (min_priority ignored)
+    
+    Filter uses explicit priority:N terms instead of pri.before/after.
+    """
+    # Parse span value
+    if '-' in str(span):
+        # Range: "2-4" or "6-3"
+        parts = str(span).split('-', 1)
+        try:
+            lo, hi = int(parts[0]), int(parts[1])
+            if lo > hi:
+                lo, hi = hi, lo  # normalize
+            lo, hi = max(1, lo), min(6, hi)
+            levels = list(range(lo, hi + 1))
+        except (ValueError, IndexError):
+            levels = [int(min_priority)]
     else:
-        # If max is 6, just show all priorities
-        pri_expr = "pri.any:"
+        # Single digit: N levels starting from min_priority
+        try:
+            count = int(span)
+            lo = int(min_priority)
+            hi = min(lo + count - 1, 6)
+            levels = list(range(lo, hi + 1))
+        except (ValueError, TypeError):
+            levels = [int(min_priority)]
+    
+    # Build explicit priority:N terms
+    pri_parts = [f"priority:{l}" for l in levels]
+    pri_expr = " or ".join(pri_parts)
     
     # Add due/scheduled with user-specified time formats
     due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
     sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
     
-    return f"{pri_expr} or {due_expr} or {sched_expr}"
-
+    return f"( {pri_expr} ) or {due_expr} or {sched_expr}"
 def update_context():
     """Manually recalculate and update context filter"""
     try:
@@ -310,18 +329,28 @@ def show_report():
     ]
     
     for level, label in pyramid:
-        # Calculate span range: lowest to (lowest + span - 1), capped at 6
+        # Calculate which levels are in the active span
         if lowest_level:
-            lowest_int = int(lowest_level)
-            span_int = int(span)
-            highest_in_span = min(lowest_int + span_int - 1, 6)
             level_int = int(level)
             
-            # Show arrow if this level is within the span
-            if lowest_int <= level_int <= highest_in_span:
-                marker = '|->'
+            if '-' in str(span):
+                # Range span: "2-4"
+                parts = str(span).split('-', 1)
+                try:
+                    lo, hi = int(parts[0]), int(parts[1])
+                    if lo > hi:
+                        lo, hi = hi, lo
+                    in_span = lo <= level_int <= hi
+                except (ValueError, IndexError):
+                    in_span = False
             else:
-                marker = '   '
+                # Single digit span: N levels from lowest
+                lowest_int = int(lowest_level)
+                span_int = int(span)
+                highest_in_span = min(lowest_int + span_int - 1, 6)
+                in_span = lowest_int <= level_int <= highest_in_span
+            
+            marker = '|->' if in_span else '   '
         else:
             marker = '   '
         
@@ -350,24 +379,33 @@ def show_report():
     print()
 
 def cmd_span(new_span):
-    """Set priority span value"""
+    """Set priority span value. Accepts single digit (3) or range (2-4)."""
     try:
         debug_print(f"Received span value: '{new_span}'")
-        span = int(new_span)
-        debug_print(f"Converted to int: {span}")
         
-        if span < 1 or span > 6:
-            debug_print(f"Span {span} out of range 1-6")
-            raise ValueError
+        # Validate
+        if '-' in new_span:
+            parts = new_span.split('-', 1)
+            lo, hi = int(parts[0]), int(parts[1])
+            if lo > hi:
+                lo, hi = hi, lo
+            if lo < 1 or hi > 6:
+                raise ValueError
+            span_str = f"{lo}-{hi}"
+        else:
+            val = int(new_span)
+            if val < 1 or val > 6:
+                raise ValueError
+            span_str = str(val)
         
-        debug_print(f"Setting span={span} via task config")
+        debug_print(f"Setting span={span_str} via task config")
         result = subprocess.run(
-            ['task', 'config', 'span', str(span)],
+            ['task', 'config', 'span', span_str],
             input='yes\n', text=True, check=False,
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
         if result.returncode == 0:
-            print(f"Priority span set to {span}")
+            print(f"Priority span set to {span_str}")
             print("Updating context filter now...")
             if update_context():
                 debug_print("update_context returned True")
@@ -380,14 +418,13 @@ def cmd_span(new_span):
             debug_print("task config returned non-zero")
             return 1
     except ValueError:
-        print(f"Invalid span value: {new_span}", file=sys.stderr)
+        print(f"Invalid span: {new_span} (use 1-6, or range like 2-4)", file=sys.stderr)
         return 1
     except Exception as e:
         debug_print(f"Exception in cmd_span: {e}")
         import traceback
         traceback.print_exc()
         return 1
-
 def get_review_tasks():
     """
     Get tasks for review in priority order:

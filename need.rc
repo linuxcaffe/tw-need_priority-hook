@@ -1,6 +1,5 @@
 # need.rc - Priority-based filtering configuration
 # Include in .taskrc with: include ~/.task/config/need.rc
-# version 0.4.2
 
 # UDA Definition
 uda.priority.type=string

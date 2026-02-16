@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# version 0.4.2
+# version 0.4.3
 """
 on-exit_priority.py - Update context filter on task completion
 Part of tw-priority-hook project
@@ -149,25 +149,45 @@ def get_lowest_priority():
     return None
 
 def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression using pri.after"""
-    min_pri = int(min_priority)
-    max_pri = min(min_pri + int(span) - 1, 6)
+    """Build context filter expression.
     
-    # Use pri.after:N to show priorities below N
-    # pri.after:3 shows pri:1 and pri:2
-    # So to show min_pri to max_pri, we use pri.after:(max_pri+1)
-    if max_pri < 6:
-        pri_expr = f"pri.after:{max_pri + 1}"
+    span can be:
+      "3"   - single digit: show 3 levels starting from min_priority
+      "2-4" - range: show exactly levels 2, 3, 4 (min_priority ignored)
+    
+    Filter uses explicit priority:N terms instead of pri.before/after.
+    """
+    # Parse span value
+    if '-' in str(span):
+        # Range: "2-4" or "6-3"
+        parts = str(span).split('-', 1)
+        try:
+            lo, hi = int(parts[0]), int(parts[1])
+            if lo > hi:
+                lo, hi = hi, lo  # normalize
+            lo, hi = max(1, lo), min(6, hi)
+            levels = list(range(lo, hi + 1))
+        except (ValueError, IndexError):
+            levels = [int(min_priority)]
     else:
-        # If max is 6, just show all priorities
-        pri_expr = "pri.any:"
+        # Single digit: N levels starting from min_priority
+        try:
+            count = int(span)
+            lo = int(min_priority)
+            hi = min(lo + count - 1, 6)
+            levels = list(range(lo, hi + 1))
+        except (ValueError, TypeError):
+            levels = [int(min_priority)]
+    
+    # Build explicit priority:N terms
+    pri_parts = [f"priority:{l}" for l in levels]
+    pri_expr = " or ".join(pri_parts)
     
     # Add due/scheduled with user-specified time formats
     due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
     sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
     
-    return f"{pri_expr} or {due_expr} or {sched_expr}"
-
+    return f"( {pri_expr} ) or {due_expr} or {sched_expr}"
 def update_context_in_config():
     """Update context.need.read in need.rc based on current lowest priority"""
     try:
