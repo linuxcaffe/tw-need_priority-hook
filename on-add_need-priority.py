@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# version 0.4.5
+# version 0.4.6
 """
 on-add_priority.py - Automatic priority assignment hook
 Part of tw-priority-hook project
@@ -80,6 +80,20 @@ else:
         """No-op when debug is disabled"""
         pass
 
+# ============================================================================
+# Timing support - set TW_TIMING=1 to enable; zero overhead otherwise
+# ============================================================================
+if os.environ.get('TW_TIMING'):
+    import time as _time_module
+    import atexit as _atexit
+    _t0 = _time_module.perf_counter()
+
+    def _report_timing():
+        elapsed = (_time_module.perf_counter() - _t0) * 1000
+        print(f"[timing] {os.path.basename(__file__)}: {elapsed:.1f}ms", file=sys.stderr)
+
+    _atexit.register(_report_timing)
+
 import json
 import re
 import subprocess
@@ -156,7 +170,7 @@ def task_matches_filter(task, filter_expr):
     return False
 
 def get_config_value(key, default=None):
-    """Read configuration value from need.rc"""
+    """Read configuration value directly from need.rc (no subprocess)"""
     try:
         with open(CONFIG_FILE, 'r') as f:
             for line in f:
@@ -167,42 +181,33 @@ def get_config_value(key, default=None):
         pass
     return default
 
-def get_rc_value(key, default=None):
-    """Read configuration value via task _get rc.<key>"""
-    try:
-        result = subprocess.run(
-            ['task', 'rc.hooks=off', '_get', f'rc.{key}'],
-            capture_output=True, text=True
-        )
-        value = result.stdout.strip()
-        return value if value else default
-    except:
-        return default
-
 def get_lowest_priority(new_task_priority=None):
     """
-    Find the lowest priority level with pending tasks
+    Find the lowest priority level with pending tasks.
+    Uses a single 'task export' call instead of 6 separate count calls.
     new_task_priority: Consider a task being added (not yet in database)
     """
     try:
-        # Check each priority level
+        result = subprocess.run(
+            ['task', 'rc.hooks=off', 'rc.context=none', 'status:pending', 'export'],
+            capture_output=True, text=True
+        )
+        counts = {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0}
+        if result.returncode == 0 and result.stdout.strip():
+            tasks = json.loads(result.stdout)
+            for t in tasks:
+                pri = t.get('priority', '')
+                if pri in counts:
+                    counts[pri] += 1
+
+        # Consider the new task being added (not yet in DB)
+        if new_task_priority in counts:
+            counts[new_task_priority] += 1
+
         for level in ['1', '2', '3', '4', '5', '6']:
-            # Count existing tasks at this level
-            result = subprocess.run(
-                ['task', 'rc.hooks=off', f'priority:{level}', 'status:pending', 'count'],
-                capture_output=True,
-                text=True
-            )
-            count = 0
-            if result.returncode == 0:
-                count = int(result.stdout.strip() or 0)
-            
-            # Consider new task being added
-            if new_task_priority == level:
-                count += 1
-            
-            if count > 0:
+            if counts[level] > 0:
                 return level
+
     except Exception as e:
         log(f"Error getting lowest priority: {e}")
     return None
@@ -247,6 +252,7 @@ def build_context_filter(min_priority, span, lookahead, lookback):
     sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
     
     return f"( {pri_expr} ) or {due_expr} or {sched_expr}"
+
 def update_context_in_config(new_task_priority=None):
     """
     Update context.needs.read in need.rc based on current lowest priority
@@ -258,9 +264,10 @@ def update_context_in_config(new_task_priority=None):
             log("No pending tasks, clearing context filter")
             filter_expr = ""
         else:
-            span = get_rc_value('span', '2')
-            lookahead = get_rc_value('lookahead', '2d')
-            lookback = get_rc_value('lookback', '1w')
+            # Read all three config values directly from need.rc (no subprocesses)
+            span = get_config_value('span', '2')
+            lookahead = get_config_value('lookahead', '2d')
+            lookback = get_config_value('lookback', '1w')
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
             log(f"Lowest priority: {lowest}, filter: {filter_expr}")
         
