@@ -57,7 +57,10 @@ lookback=1w
 # Context definition (auto-maintained by hooks)
 # Uses pri.after:N syntax where pri.after:3 shows pri:1 and pri:2
 context.need.read=
-### include started
+
+# Additional filters appended to the generated context filter with 'or'
+# Example: additional.filters=start.any:
+additional.filters=start.any:
 
 # Command alias for nn (Needs Navigator)
 # NOTE: Taskwarrior aliases cannot pass arguments like 'span 2'

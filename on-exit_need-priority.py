@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+import os as _os_timing, time as _time_module
+if _os_timing.environ.get('TW_TIMING'):
+    import atexit as _atexit
+    _t0 = _time_module.perf_counter()
+
+    def _report_timing(_f=__file__):
+        elapsed = (_time_module.perf_counter() - _t0) * 1000
+        import os.path as _osp
+        print(f"[timing] {_osp.basename(_f)}: {elapsed:.1f}ms", file=__import__('sys').stderr)
+
+    _atexit.register(_report_timing)
+
 # version 0.4.6
 """
 on-exit_priority.py - Update context filter on task completion
@@ -83,19 +95,6 @@ else:
         pass
 
 # ============================================================================
-# Timing support - set TW_TIMING=1 to enable; zero overhead otherwise
-# ============================================================================
-if os.environ.get('TW_TIMING'):
-    import time as _time_module
-    import atexit as _atexit
-    _t0 = _time_module.perf_counter()
-
-    def _report_timing():
-        elapsed = (_time_module.perf_counter() - _t0) * 1000
-        print(f"[timing] {os.path.basename(__file__)}: {elapsed:.1f}ms", file=sys.stderr)
-
-    _atexit.register(_report_timing)
-
 import json
 import subprocess
 
@@ -213,6 +212,9 @@ def update_context_in_config():
             lookahead = get_config_value('lookahead', '2d')
             lookback = get_config_value('lookback', '1w')
             filter_expr = build_context_filter(lowest, span, lookahead, lookback)
+            additional = get_config_value('additional.filters', '').strip()
+            if additional:
+                filter_expr = f"{filter_expr} or {additional}"
             log(f"Lowest priority: {lowest}, filter: {filter_expr}")
         
         # Update need.rc
