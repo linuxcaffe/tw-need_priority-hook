@@ -43,18 +43,10 @@ except ValueError:
 
 debug_active = DEBUG_MODE == 1 or tw_debug_level > 0
 
-# Determine log directory based on context
+# Determine log directory
 def get_log_dir():
-    """Auto-detect dev vs production mode"""
-    cwd = Path.cwd()
-    
-    # Dev mode: running from project directory (has .git)
-    if (cwd / '.git').exists():
-        log_dir = cwd / 'logs' / 'debug'
-    else:
-        # Production mode: installed and triggered by tw --debug
-        log_dir = Path.home() / '.task' / 'logs' / 'debug'
-    
+    """Hooks always log to ~/.task/logs/debug/"""
+    log_dir = Path.home() / '.task' / 'logs' / 'debug'
     log_dir.mkdir(parents=True, exist_ok=True)
     return log_dir
 
