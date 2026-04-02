@@ -96,10 +96,10 @@ import subprocess
 
 
 # Configuration
-TASK_DIR = os.path.expanduser("~/.task")
+TASK_DIR = os.environ.get('TW_TASK_DIR', os.path.expanduser("~/.task"))
 CONFIG_DIR = os.path.join(TASK_DIR, "config")
 CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
-LOG_DIR = os.path.join(TASK_DIR, "logs/debug")
+LOG_DIR = os.path.join(TASK_DIR, "logs", "debug")
 LOG_FILE = os.path.join(LOG_DIR, "on-exit.log")
 
 def log(message):

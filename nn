@@ -115,8 +115,9 @@ import json
 
 
 # Configuration
-HOOK_DIR = os.path.expanduser("~/.task/hooks")
-CONFIG_DIR = os.path.expanduser("~/.task/config")
+_task_dir = os.environ.get('TW_TASK_DIR', os.path.expanduser("~/.task"))
+HOOK_DIR = os.path.join(_task_dir, "hooks")
+CONFIG_DIR = os.path.join(_task_dir, "config")
 CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
 
 # Debug mode - set to 1 to enable debug output
