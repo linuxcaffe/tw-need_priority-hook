@@ -312,7 +312,14 @@ def main():
         task = json.loads(task_json)
         
         log(f"Processing task: {task.get('description', 'NO DESC')}")
-        
+
+        # Normalize legacy H/M/L priority values to numeric scale
+        _PRIORITY_MAP = {'H': '2', 'M': '4', 'L': '6'}
+        if task.get('priority') in _PRIORITY_MAP:
+            orig = task['priority']
+            task['priority'] = _PRIORITY_MAP[orig]
+            log(f"Normalized priority {orig} -> {task['priority']}")
+
         # Check if priority already set by user
         if 'priority' in task and task['priority']:
             log(f"Priority already set to {task['priority']}")

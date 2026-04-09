@@ -1,13 +1,28 @@
 #!/usr/bin/env python3
-# version 0.4.6
+import os as _os_timing, time as _time_module
+if _os_timing.environ.get('TW_TIMING'):
+    import atexit as _atexit
+    _t0 = _time_module.perf_counter()
+
+    def _report_timing(_f=__file__):
+        elapsed = (_time_module.perf_counter() - _t0) * 1000
+        import os.path as _osp
+        print(f"[timing] {_osp.basename(_f)}: {elapsed:.1f}ms", file=__import__('sys').stderr)
+
+    _atexit.register(_report_timing)
+
+# version 0.4.7
 """
-on-exit_priority.py - Update context filter on task completion
+on-modify_need-priority.py - Normalize priority and update context on task modify
 Part of tw-priority-hook project
 
-NOTE: This hook only triggers on 'task done', NOT on 'task delete'.
-Deletions are handled by on-modify_priority.py which detects status=deleted.
+Normalizes legacy H/M/L priority values to the numeric 1-6 scale, then
+recalculates context.need.read in need.rc.
 
-Recalculates and updates context filter when tasks are completed.
+on-modify stdin protocol:
+  line 1: original task JSON
+  line 2: modified task JSON
+stdout: modified task JSON (one line)
 """
 
 # ============================================================================
@@ -31,18 +46,10 @@ except ValueError:
 
 debug_active = DEBUG_MODE == 1 or tw_debug_level > 0
 
-# Determine log directory based on context
+# Determine log directory
 def get_log_dir():
-    """Auto-detect dev vs production mode"""
-    cwd = Path.cwd()
-    
-    # Dev mode: running from project directory (has .git)
-    if (cwd / '.git').exists():
-        log_dir = cwd / 'logs' / 'debug'
-    else:
-        # Production mode: installed and triggered by tw --debug
-        log_dir = Path.home() / '.task' / 'logs' / 'debug'
-    
+    """Hooks always log to ~/.task/logs/debug/"""
+    log_dir = Path.home() / '.task' / 'logs' / 'debug'
     log_dir.mkdir(parents=True, exist_ok=True)
     return log_dir
 
@@ -50,32 +57,27 @@ def get_log_dir():
 if debug_active:
     DEBUG_LOG_DIR = get_log_dir()
     DEBUG_SESSION_ID = datetime.now().strftime("%Y%m%d_%H%M%S")
-    DEBUG_LOG_FILE = DEBUG_LOG_DIR / f"on-exit_need-priority.py_debug_{DEBUG_SESSION_ID}.log"
-    
+    DEBUG_LOG_FILE = DEBUG_LOG_DIR / f"on-modify_need-priority.py_debug_{DEBUG_SESSION_ID}.log"
+
     def debug_log(message, level=1):
         """Write debug message to log file and stderr"""
         if debug_active and (DEBUG_MODE == 1 or tw_debug_level >= level):
             timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
             prefix = f"[DEBUG-{level}]"
             log_line = f"{timestamp} {prefix} {message}\n"
-            
-            # Write to file
             with open(DEBUG_LOG_FILE, 'a') as f:
                 f.write(log_line)
-            
-            # Write to stderr with color
             print(f"\033[34m{prefix}\033[0m {message}", file=sys.stderr)
-    
-    # Initialize log file
+
     with open(DEBUG_LOG_FILE, 'w') as f:
         f.write("=" * 70 + "\n")
         f.write(f"Debug Session - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write(f"Script: on-exit_need-priority.py\n")
+        f.write(f"Script: on-modify_need-priority.py\n")
         f.write(f"Debug Mode: {DEBUG_MODE}\n")
         f.write(f"TW_DEBUG Level: {tw_debug_level}\n")
         f.write(f"Session ID: {DEBUG_SESSION_ID}\n")
         f.write("=" * 70 + "\n\n")
-    
+
     debug_log(f"Debug logging initialized: {DEBUG_LOG_FILE}", 1)
 else:
     def debug_log(message, level=1):
@@ -83,19 +85,6 @@ else:
         pass
 
 # ============================================================================
-# Timing support - set TW_TIMING=1 to enable; zero overhead otherwise
-# ============================================================================
-if os.environ.get('TW_TIMING'):
-    import time as _time_module
-    import atexit as _atexit
-    _t0 = _time_module.perf_counter()
-
-    def _report_timing():
-        elapsed = (_time_module.perf_counter() - _t0) * 1000
-        print(f"[timing] {os.path.basename(__file__)}: {elapsed:.1f}ms", file=sys.stderr)
-
-    _atexit.register(_report_timing)
-
 import json
 import subprocess
 
@@ -103,13 +92,16 @@ import subprocess
 # Original Code Below
 # ============================================================================
 
-
 # Configuration
-TASK_DIR = os.path.expanduser("~/.task")
+TASK_DIR = os.environ.get('TW_TASK_DIR', os.path.expanduser("~/.task"))
 CONFIG_DIR = os.path.join(TASK_DIR, "config")
 CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
-LOG_DIR = os.path.join(TASK_DIR, "logs/debug")
-LOG_FILE = os.path.join(LOG_DIR, "on-exit.log")
+LOG_DIR = os.path.join(TASK_DIR, "logs", "debug")
+LOG_FILE = os.path.join(LOG_DIR, "on-modify.log")
+
+# H/M/L -> numeric normalization map
+PRIORITY_MAP = {'H': '2', 'M': '4', 'L': '6'}
+
 
 def log(message):
     """Write to hook log file"""
@@ -120,6 +112,7 @@ def log(message):
             f.write(f"[{timestamp}] {message}\n")
     except Exception as e:
         print(f"LOG ERROR: {e}", file=sys.stderr)
+
 
 def get_config_value(key, default=None):
     """Read configuration value directly from need.rc (no subprocess)"""
@@ -133,11 +126,9 @@ def get_config_value(key, default=None):
         pass
     return default
 
+
 def get_lowest_priority():
-    """
-    Find the lowest priority level with pending tasks.
-    Uses a single 'task export' call instead of 6 separate count calls.
-    """
+    """Find the lowest priority level with pending tasks."""
     try:
         result = subprocess.run(
             ['task', 'rc.hooks=off', 'rc.context=none', 'status:pending', 'export'],
@@ -150,38 +141,27 @@ def get_lowest_priority():
                 pri = t.get('priority', '')
                 if pri in counts:
                     counts[pri] += 1
-
         for level in ['1', '2', '3', '4', '5', '6']:
             if counts[level] > 0:
                 return level
-
     except Exception as e:
         log(f"Error getting lowest priority: {e}")
     return None
 
+
 def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression.
-    
-    span can be:
-      "3"   - single digit: show 3 levels starting from min_priority
-      "2-4" - range: show exactly levels 2, 3, 4 (min_priority ignored)
-    
-    Filter uses explicit priority:N terms instead of pri.before/after.
-    """
-    # Parse span value
+    """Build context filter expression."""
     if '-' in str(span):
-        # Range: "2-4" or "6-3"
         parts = str(span).split('-', 1)
         try:
             lo, hi = int(parts[0]), int(parts[1])
             if lo > hi:
-                lo, hi = hi, lo  # normalize
+                lo, hi = hi, lo
             lo, hi = max(1, lo), min(6, hi)
             levels = list(range(lo, hi + 1))
         except (ValueError, IndexError):
             levels = [int(min_priority)]
     else:
-        # Single digit: N levels starting from min_priority
         try:
             count = int(span)
             lo = int(min_priority)
@@ -189,26 +169,22 @@ def build_context_filter(min_priority, span, lookahead, lookback):
             levels = list(range(lo, hi + 1))
         except (ValueError, TypeError):
             levels = [int(min_priority)]
-    
-    # Build explicit priority:N terms
+
     pri_parts = [f"priority:{l}" for l in levels]
     pri_expr = " or ".join(pri_parts)
-    
-    # Add due/scheduled with user-specified time formats
     due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
     sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
-    
     return f"( {pri_expr} ) or {due_expr} or {sched_expr}"
 
+
 def update_context_in_config():
-    """Update context.need.read in need.rc based on current lowest priority"""
+    """Update context.need.read in need.rc based on current lowest priority."""
     try:
         lowest = get_lowest_priority()
         if not lowest:
             log("No pending tasks, clearing context filter")
             filter_expr = ""
         else:
-            # Read all three config values directly from need.rc (no subprocesses)
             span = get_config_value('span', '2')
             lookahead = get_config_value('lookahead', '2d')
             lookback = get_config_value('lookback', '1w')
@@ -217,8 +193,7 @@ def update_context_in_config():
             if additional:
                 filter_expr = f"{filter_expr} or {additional}"
             log(f"Lowest priority: {lowest}, filter: {filter_expr}")
-        
-        # Update need.rc
+
         lines = []
         found = False
         with open(CONFIG_FILE, 'r') as f:
@@ -228,41 +203,53 @@ def update_context_in_config():
                     found = True
                 else:
                     lines.append(line)
-        
+
         if not found:
             lines.append(f'\ncontext.need.read={filter_expr}\n')
-        
+
         with open(CONFIG_FILE, 'w') as f:
             f.writelines(lines)
-        
+
         log(f"Updated context.need.read={filter_expr}")
         return True
-        
+
     except Exception as e:
         log(f"Error updating context: {e}")
         return False
 
+
 def main():
     """Hook entry point"""
     try:
-        # Read task input (on-exit receives task input but doesn't output)
-        input_data = sys.stdin.read()
-        
-        log("=== ON-EXIT TRIGGERED ===")
-        log(f"Input received: {len(input_data)} bytes")
-        
-        # Update context filter
-        log("Calling update_context_in_config()")
-        result = update_context_in_config()
-        log(f"Update completed: {result}")
-        
+        # on-modify receives 2 lines: original task, then modified task
+        original_json = sys.stdin.readline()
+        modified_json = sys.stdin.readline()
+        task = json.loads(modified_json)
+
+        log(f"Processing modify: {task.get('description', 'NO DESC')}")
+
+        # Normalize legacy H/M/L priority to numeric scale
+        if task.get('priority') in PRIORITY_MAP:
+            orig = task['priority']
+            task['priority'] = PRIORITY_MAP[orig]
+            log(f"Normalized priority {orig} -> {task['priority']}")
+
+        # Output the (possibly modified) task
+        print(json.dumps(task))
+
+        # Recalculate context filter
+        update_context_in_config()
+
         return 0
-        
+
     except Exception as e:
         log(f"FATAL ERROR: {e}")
         import traceback
         log(traceback.format_exc())
+        # On error, pass the modified task through unchanged
+        print(modified_json, end='')
         return 1
+
 
 if __name__ == '__main__':
     sys.exit(main())
