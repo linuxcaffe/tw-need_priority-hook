@@ -129,6 +129,24 @@ def debug_print(msg):
         print(f"DEBUG: {msg}")
 
 
+def _write_atomic(path, lines):
+    """Write lines to path atomically: write temp file then rename.
+    Prevents partial-write corruption if the process is killed mid-write.
+    """
+    import tempfile
+    dir_ = os.path.dirname(path)
+    fd, tmp = tempfile.mkstemp(dir=dir_, prefix='.need.rc.tmp')
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.writelines(lines)
+        os.rename(tmp, path)
+    except Exception:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
 def get_config_value(key, default=None):
     """Read configuration value directly from need.rc (no subprocess)"""
     try:
@@ -152,19 +170,20 @@ def set_config_value(key, value):
         with open(CONFIG_FILE, 'r') as f:
             lines = f.readlines()
         
-        with open(CONFIG_FILE, 'w') as f:
-            for line in lines:
-                stripped = line.strip()
-                # Match uncommented key, or commented-out key (to uncomment it)
-                if stripped.startswith(key + '=') or stripped == f'#{key}' or stripped.startswith(f'#{key}='):
-                    f.write(f"{key}={value}\n")
-                    found = True
-                else:
-                    f.write(line)
-            
-            if not found:
-                f.write(f"\n{key}={value}\n")
-        
+        out_lines = []
+        for line in lines:
+            stripped = line.strip()
+            # Match uncommented key, or commented-out key (to uncomment it)
+            if stripped.startswith(key + '=') or stripped == f'#{key}' or stripped.startswith(f'#{key}='):
+                out_lines.append(f"{key}={value}\n")
+                found = True
+            else:
+                out_lines.append(line)
+
+        if not found:
+            out_lines.append(f"\n{key}={value}\n")
+
+        _write_atomic(CONFIG_FILE, out_lines)
         return True
     except Exception as e:
         print(f"Error updating config: {e}", file=sys.stderr)
@@ -279,9 +298,7 @@ def update_context():
             debug_print("context.need.read not found, appending")
             lines.append(f'\ncontext.need.read={filter_expr}\n')
         
-        with open(CONFIG_FILE, 'w') as f:
-            f.writelines(lines)
-        
+        _write_atomic(CONFIG_FILE, lines)
         print("Context updated successfully")
         debug_print("update_context() returning True")
         return True

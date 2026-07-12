@@ -160,6 +160,24 @@ def task_matches_filter(task, filter_expr):
     
     return False
 
+def _write_atomic(path, lines):
+    """Write lines to path atomically: write temp file then rename.
+    Prevents partial-write corruption if the process is killed mid-write.
+    """
+    import tempfile
+    dir_ = os.path.dirname(path)
+    fd, tmp = tempfile.mkstemp(dir=dir_, prefix='.need.rc.tmp')
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.writelines(lines)
+        os.rename(tmp, path)
+    except Exception:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
 def get_config_value(key, default=None):
     """Read configuration value directly from need.rc (no subprocess)"""
     try:
@@ -276,9 +294,7 @@ def update_context_in_config(new_task_priority=None):
         if not found:
             lines.append(f'\ncontext.need.read={filter_expr}\n')
         
-        with open(CONFIG_FILE, 'w') as f:
-            f.writelines(lines)
-        
+        _write_atomic(CONFIG_FILE, lines)
         log(f"Updated context.need.read={filter_expr}")
         return True
         
