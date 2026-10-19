@@ -1,6 +1,13 @@
 CHANGES for tw-priority-hook
 =============================
 
+v0.6.2 - 2026-10-19
+-------------------
+- on-modify ships again: `task 5 mod pri:H` became 2 only in a hook that was in the repo but
+  not in files= since its April re-add. Cut down to the H/M/L conversion (on-exit does the
+  filter); README lists it
+- tests/test_need_hooks.py (16)
+
 v0.6.1 - 2026-10-19
 -------------------
 - on-exit: fills an unset context.need.read even after a report, so a fresh install (need.rc

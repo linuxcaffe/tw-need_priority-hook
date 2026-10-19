@@ -11,13 +11,14 @@ if _os_timing.environ.get('TW_TIMING'):
 
     _atexit.register(_report_timing)
 
-# version 0.4.7
+# version 0.6.2
 """
-on-modify_need-priority.py - Normalize priority and update context on task modify
-Part of tw-priority-hook project
+on-modify_need-priority.py - Normalize H/M/L priority on modify
+Part of tw-need_priority-hook
 
-Normalizes legacy H/M/L priority values to the numeric 1-6 scale, then
-recalculates context.need.read in need.rc.
+`task 5 mod pri:H` is valid (uda.priority.values keeps H,M,L for old tasks); this turns
+it into the numeric scale as on-add does: H->2, M->4, L->6. The need context filter is
+on-exit_need-priority.py's job.
 
 on-modify stdin protocol:
   line 1: original task JSON
@@ -86,7 +87,6 @@ else:
 
 # ============================================================================
 import json
-import subprocess
 
 # ============================================================================
 # Original Code Below
@@ -94,8 +94,6 @@ import subprocess
 
 # Configuration
 TASK_DIR = os.environ.get('TW_TASK_DIR', os.path.expanduser("~/.task"))
-CONFIG_DIR = os.path.join(TASK_DIR, "config")
-CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
 LOG_DIR = os.path.join(TASK_DIR, "logs", "debug")
 LOG_FILE = os.path.join(LOG_DIR, "on-modify.log")
 
@@ -114,126 +112,6 @@ def log(message):
         print(f"LOG ERROR: {e}", file=sys.stderr)
 
 
-def _write_atomic(path, lines):
-    """Write lines to path atomically: write temp file then rename.
-    Prevents partial-write corruption if the process is killed mid-write.
-    """
-    import tempfile
-    dir_ = os.path.dirname(path)
-    fd, tmp = tempfile.mkstemp(dir=dir_, prefix='.need.rc.tmp')
-    try:
-        with os.fdopen(fd, 'w') as f:
-            f.writelines(lines)
-        os.rename(tmp, path)
-    except Exception:
-        try:
-            os.unlink(tmp)
-        except OSError:
-            pass
-        raise
-
-def get_config_value(key, default=None):
-    """Read configuration value directly from need.rc (no subprocess)"""
-    try:
-        with open(CONFIG_FILE, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line.startswith(key + '='):
-                    return line.split('=', 1)[1]
-    except:
-        pass
-    return default
-
-
-def get_lowest_priority():
-    """Find the lowest priority level with pending tasks."""
-    try:
-        result = subprocess.run(
-            ['task', 'rc.hooks=off', 'rc.context=none', 'status:pending', 'export'],
-            capture_output=True, text=True
-        )
-        counts = {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0}
-        if result.returncode == 0 and result.stdout.strip():
-            tasks = json.loads(result.stdout)
-            for t in tasks:
-                pri = t.get('priority', '')
-                if pri in counts:
-                    counts[pri] += 1
-        for level in ['1', '2', '3', '4', '5', '6']:
-            if counts[level] > 0:
-                return level
-    except Exception as e:
-        log(f"Error getting lowest priority: {e}")
-    return None
-
-
-def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression."""
-    if '-' in str(span):
-        parts = str(span).split('-', 1)
-        try:
-            lo, hi = int(parts[0]), int(parts[1])
-            if lo > hi:
-                lo, hi = hi, lo
-            lo, hi = max(1, lo), min(6, hi)
-            levels = list(range(lo, hi + 1))
-        except (ValueError, IndexError):
-            levels = [int(min_priority)]
-    else:
-        try:
-            count = int(span)
-            lo = int(min_priority)
-            hi = min(lo + count - 1, 6)
-            levels = list(range(lo, hi + 1))
-        except (ValueError, TypeError):
-            levels = [int(min_priority)]
-
-    pri_parts = [f"priority:{l}" for l in levels]
-    pri_expr = " or ".join(pri_parts)
-    due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
-    sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
-    return f"( {pri_expr} ) or {due_expr} or {sched_expr}"
-
-
-def update_context_in_config():
-    """Update context.need.read in need.rc based on current lowest priority."""
-    try:
-        lowest = get_lowest_priority()
-        if not lowest:
-            log("No pending tasks, clearing context filter")
-            filter_expr = ""
-        else:
-            span = get_config_value('span', '2')
-            lookahead = get_config_value('lookahead', '2d')
-            lookback = get_config_value('lookback', '1w')
-            filter_expr = build_context_filter(lowest, span, lookahead, lookback)
-            additional = get_config_value('additional.filters', '').strip()
-            if additional:
-                filter_expr = f"{filter_expr} or {additional}"
-            log(f"Lowest priority: {lowest}, filter: {filter_expr}")
-
-        lines = []
-        found = False
-        with open(CONFIG_FILE, 'r') as f:
-            for line in f:
-                if line.startswith('context.need.read='):
-                    lines.append(f'context.need.read={filter_expr}\n')
-                    found = True
-                else:
-                    lines.append(line)
-
-        if not found:
-            lines.append(f'\ncontext.need.read={filter_expr}\n')
-
-        _write_atomic(CONFIG_FILE, lines)
-        log(f"Updated context.need.read={filter_expr}")
-        return True
-
-    except Exception as e:
-        log(f"Error updating context: {e}")
-        return False
-
-
 def main():
     """Hook entry point"""
     try:
@@ -242,20 +120,14 @@ def main():
         modified_json = sys.stdin.readline()
         task = json.loads(modified_json)
 
-        log(f"Processing modify: {task.get('description', 'NO DESC')}")
-
         # Normalize legacy H/M/L priority to numeric scale
         if task.get('priority') in PRIORITY_MAP:
             orig = task['priority']
             task['priority'] = PRIORITY_MAP[orig]
             log(f"Normalized priority {orig} -> {task['priority']}")
 
-        # Output the (possibly modified) task
+        # Output the (possibly modified) task; on-exit updates the need context afterwards
         print(json.dumps(task))
-
-        # Recalculate context filter
-        update_context_in_config()
-
         return 0
 
     except Exception as e:

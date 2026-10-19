@@ -6,6 +6,7 @@
 - When tasks changed, on-exit rewrites need.rc only if the filter differs, and then touches
   config/.cmx_stale so tw rebuilds a cmx set that includes need.
 - An unset filter (fresh install: need.rc ships it empty) is filled after any command.
+- on-modify turns H/M/L into 2/4/6, as on-add does (it was in the repo but never shipped).
 - on-add only assigns priority; the filter is on-exit's job (on-add's copy missed
   additional.filters).
 """
@@ -120,3 +121,22 @@ def test_add_assigns_priority_and_leaves_the_filter(sandbox, task, priority):
     assert json.loads(r.stdout)['priority'] == priority
     assert not sandbox.calls.exists()                   # no export during an add
     assert sandbox.filter() == 'context.need.read=OLD'
+
+
+# ── on-modify: H/M/L on modify too ───────────────────────────────────────────
+
+@pytest.mark.parametrize('new,priority', [('H', '2'), ('M', '4'), ('L', '6'), ('3', '3')])
+def test_modify_normalizes_hml(sandbox, new, priority):
+    old = {'uuid': 'a', 'description': 'x', 'priority': '5'}
+    stdin = json.dumps(old) + '\n' + json.dumps(dict(old, priority=new)) + '\n'
+    r = sandbox.run('on-modify_need-priority.py', stdin)
+    assert r.returncode == 0, r.stderr
+    assert json.loads(r.stdout)['priority'] == priority
+    assert not sandbox.calls.exists()                   # the filter is on-exit's job
+    assert sandbox.filter() == 'context.need.read=OLD'
+
+
+def test_modify_without_priority_passes_through(sandbox):
+    task = {'uuid': 'a', 'description': 'no priority'}
+    r = sandbox.run('on-modify_need-priority.py', json.dumps(task) + '\n' + json.dumps(task) + '\n')
+    assert json.loads(r.stdout) == task

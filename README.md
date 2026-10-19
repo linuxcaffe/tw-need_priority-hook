@@ -81,12 +81,14 @@ tw -I need-priority
 ```bash
 # Copy hooks and config
 cp on-add_need-priority.py ~/.task/hooks/
+cp on-modify_need-priority.py ~/.task/hooks/
 cp on-exit_need-priority.py ~/.task/hooks/
 cp nn ~/.task/scripts/nn
 cp need.rc ~/.task/config/
 
 # Make executable
 chmod +x ~/.task/hooks/on-add_need-priority.py
+chmod +x ~/.task/hooks/on-modify_need-priority.py
 chmod +x ~/.task/hooks/on-exit_need-priority.py
 chmod +x ~/.task/scripts/nn
 
@@ -158,11 +160,16 @@ task context none
 ## How it works
 
 **on-add** checks the new task against auto-assignment rules. First match
-wins. If no match and no user-set priority, defaults to pri:4. Then
-recalculates and writes the context filter.
+wins. If no match and no user-set priority, defaults to pri:4. Legacy
+H/M/L become 2/4/6.
 
-**on-exit** recalculates the context filter after task completion or deletion,
-so the filter adjusts as you clear lower-level tasks.
+**on-modify** turns H/M/L into 2/4/6 when a task is modified (`task 5 mod pri:H`).
+
+**on-exit** recalculates the context filter after any command that added or
+changed tasks (adds, completions, deletions, priority changes), so the filter
+adjusts as you clear lower-level tasks. It rewrites `need.rc` only when the
+filter changes, and then marks tw's cmx filters for a rebuild. Reports cost
+it nothing.
 
 **nn** shows the priority pyramid, current configuration, and active filter.
 Also handles span changes, manual updates, and interactive review.
@@ -186,8 +193,9 @@ Higher priorities boost urgency scores (configured in `need.rc`):
 
 ## Files
 ```
-on-add_need-priority.py    # Auto-assignment + context update
-on-exit_need-priority.py   # Context update on completion/deletion
+on-add_need-priority.py    # Auto-assignment (and H/M/L -> 2/4/6)
+on-modify_need-priority.py # H/M/L -> 2/4/6 on modify
+on-exit_need-priority.py   # Context update after any change
 nn                         # Companion script (Needs Navigator)
 need.rc                    # Configuration + UDA + context definition
 ```
