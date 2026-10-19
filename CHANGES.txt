@@ -1,6 +1,19 @@
 CHANGES for tw-priority-hook
 =============================
 
+v0.6.0 - 2026-10-19
+-------------------
+- on-exit: a command that changed no task (any report) returns at once. It used to export
+  every pending task, rewrite need.rc and log five lines on every task command (~0.4 s each;
+  ~/.task/logs/debug/on-exit.log had grown to 12 MB)
+- on-exit: rewrites need.rc only when context.need.read changes, logs one line when it does,
+  and touches ~/.task/config/.cmx_stale so tw rebuilds a cmx set that includes need
+- on-add: only assigns priority. Its own copy of the filter code (which left out
+  additional.filters, and exported every pending task during each add) is gone: on-exit runs
+  after every add with the task saved
+- tests/test_need_hooks.py (10)
+- (Versions 0.3.2-0.5.1 were released without entries here.)
+
 v0.3.1 - 2026-01-18
 -------------------
 Improvements:

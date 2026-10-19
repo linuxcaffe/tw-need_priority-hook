@@ -11,13 +11,14 @@ if _os_timing.environ.get('TW_TIMING'):
 
     _atexit.register(_report_timing)
 
-# version 0.4.6
+# version 0.6.0
 """
-on-add_priority.py - Automatic priority assignment hook
-Part of tw-priority-hook project
+on-add_need-priority.py - Automatic priority assignment hook
+Part of tw-need_priority-hook
 
-Automatically assigns priority based on tags, projects, and description
-patterns defined in need.rc auto-assignment rules.
+Assigns priority from the tags, projects and description patterns in need.rc's
+priority.N.auto rules (pri:4 when none match; H/M/L become 2/4/6). The need context
+filter is on-exit_need-priority.py's job: it runs after the add, with the task saved.
 """
 
 # ============================================================================
@@ -87,7 +88,6 @@ else:
 # ============================================================================
 import json
 import re
-import subprocess
 
 # ============================================================================
 # Original Code Below
@@ -160,148 +160,6 @@ def task_matches_filter(task, filter_expr):
     
     return False
 
-def _write_atomic(path, lines):
-    """Write lines to path atomically: write temp file then rename.
-    Prevents partial-write corruption if the process is killed mid-write.
-    """
-    import tempfile
-    dir_ = os.path.dirname(path)
-    fd, tmp = tempfile.mkstemp(dir=dir_, prefix='.need.rc.tmp')
-    try:
-        with os.fdopen(fd, 'w') as f:
-            f.writelines(lines)
-        os.rename(tmp, path)
-    except Exception:
-        try:
-            os.unlink(tmp)
-        except OSError:
-            pass
-        raise
-
-def get_config_value(key, default=None):
-    """Read configuration value directly from need.rc (no subprocess)"""
-    try:
-        with open(CONFIG_FILE, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line.startswith(key + '='):
-                    return line.split('=', 1)[1]
-    except:
-        pass
-    return default
-
-def get_lowest_priority(new_task_priority=None):
-    """
-    Find the lowest priority level with pending tasks.
-    Uses a single 'task export' call instead of 6 separate count calls.
-    new_task_priority: Consider a task being added (not yet in database)
-    """
-    try:
-        result = subprocess.run(
-            ['task', 'rc.hooks=off', 'rc.context=none', 'status:pending', 'export'],
-            capture_output=True, text=True
-        )
-        counts = {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0}
-        if result.returncode == 0 and result.stdout.strip():
-            tasks = json.loads(result.stdout)
-            for t in tasks:
-                pri = t.get('priority', '')
-                if pri in counts:
-                    counts[pri] += 1
-
-        # Consider the new task being added (not yet in DB)
-        if new_task_priority in counts:
-            counts[new_task_priority] += 1
-
-        for level in ['1', '2', '3', '4', '5', '6']:
-            if counts[level] > 0:
-                return level
-
-    except Exception as e:
-        log(f"Error getting lowest priority: {e}")
-    return None
-
-def build_context_filter(min_priority, span, lookahead, lookback):
-    """Build context filter expression.
-    
-    span can be:
-      "3"   - single digit: show 3 levels starting from min_priority
-      "2-4" - range: show exactly levels 2, 3, 4 (min_priority ignored)
-    
-    Filter uses explicit priority:N terms instead of pri.before/after.
-    """
-    # Parse span value
-    if '-' in str(span):
-        # Range: "2-4" or "6-3"
-        parts = str(span).split('-', 1)
-        try:
-            lo, hi = int(parts[0]), int(parts[1])
-            if lo > hi:
-                lo, hi = hi, lo  # normalize
-            lo, hi = max(1, lo), min(6, hi)
-            levels = list(range(lo, hi + 1))
-        except (ValueError, IndexError):
-            levels = [int(min_priority)]
-    else:
-        # Single digit: N levels starting from min_priority
-        try:
-            count = int(span)
-            lo = int(min_priority)
-            hi = min(lo + count - 1, 6)
-            levels = list(range(lo, hi + 1))
-        except (ValueError, TypeError):
-            levels = [int(min_priority)]
-    
-    # Build explicit priority:N terms
-    pri_parts = [f"priority:{l}" for l in levels]
-    pri_expr = " or ".join(pri_parts)
-    
-    # Add due/scheduled with user-specified time formats
-    due_expr = f"( due.before:today+{lookahead} and due.after:today-{lookback} )"
-    sched_expr = f"( scheduled.before:today+{lookahead} and sched.after:today-{lookback} )"
-    
-    return f"( {pri_expr} ) or {due_expr} or {sched_expr}"
-
-def update_context_in_config(new_task_priority=None):
-    """
-    Update context.needs.read in need.rc based on current lowest priority
-    new_task_priority: Consider a task being added (not yet in database)
-    """
-    try:
-        lowest = get_lowest_priority(new_task_priority)
-        if not lowest:
-            log("No pending tasks, clearing context filter")
-            filter_expr = ""
-        else:
-            # Read all three config values directly from need.rc (no subprocesses)
-            span = get_config_value('span', '2')
-            lookahead = get_config_value('lookahead', '2d')
-            lookback = get_config_value('lookback', '1w')
-            filter_expr = build_context_filter(lowest, span, lookahead, lookback)
-            log(f"Lowest priority: {lowest}, filter: {filter_expr}")
-        
-        # Update need.rc
-        lines = []
-        found = False
-        with open(CONFIG_FILE, 'r') as f:
-            for line in f:
-                if line.startswith('context.need.read='):
-                    lines.append(f'context.need.read={filter_expr}\n')
-                    found = True
-                else:
-                    lines.append(line)
-        
-        if not found:
-            lines.append(f'\ncontext.need.read={filter_expr}\n')
-        
-        _write_atomic(CONFIG_FILE, lines)
-        log(f"Updated context.need.read={filter_expr}")
-        return True
-        
-    except Exception as e:
-        log(f"Error updating context: {e}")
-        return False
-
 def determine_priority(task, rules):
     """
     Determine priority based on auto-assignment rules
@@ -340,7 +198,6 @@ def main():
         if 'priority' in task and task['priority']:
             log(f"Priority already set to {task['priority']}")
             print(json.dumps(task))
-            update_context_in_config(task['priority'])
             return 0
         
         # Parse auto-assignment rules
@@ -362,12 +219,8 @@ def main():
         
         log(f"Final priority: {task['priority']}")
         
-        # Output modified task
+        # Output modified task (on-exit then updates the need context with it in the database)
         print(json.dumps(task))
-        
-        # Update context filter, considering this new task
-        update_context_in_config(task['priority'])
-        
         return 0
         
     except Exception as e:

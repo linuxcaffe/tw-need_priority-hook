@@ -11,15 +11,16 @@ if _os_timing.environ.get('TW_TIMING'):
 
     _atexit.register(_report_timing)
 
-# version 0.4.6
+# version 0.6.0
 """
-on-exit_priority.py - Update context filter on task completion
-Part of tw-priority-hook project
+on-exit_need-priority.py - Keep the need context filter in step with the tasks
+Part of tw-need_priority-hook
 
-NOTE: This hook only triggers on 'task done', NOT on 'task delete'.
-Deletions are handled by on-modify_priority.py which detects status=deleted.
-
-Recalculates and updates context filter when tasks are completed.
+Taskwarrior runs on-exit hooks after every command, with the tasks the command added or
+changed on stdin (nothing for a report). When any changed, this recomputes context.need.read
+from the lowest priority that has pending tasks, and rewrites need.rc only when the filter
+actually differs; then it touches ~/.task/config/.cmx_stale so tw rebuilds a cmx set that
+includes need. Adds, completions, deletions and priority changes all arrive here.
 """
 
 # ============================================================================
@@ -99,6 +100,7 @@ import subprocess
 TASK_DIR = os.environ.get('TW_TASK_DIR', os.path.expanduser("~/.task"))
 CONFIG_DIR = os.path.join(TASK_DIR, "config")
 CONFIG_FILE = os.path.join(CONFIG_DIR, "need.rc")
+CMX_STALE_MARKER = os.path.join(CONFIG_DIR, ".cmx_stale")   # tw rebuilds cmx filters when present
 LOG_DIR = os.path.join(TASK_DIR, "logs", "debug")
 LOG_FILE = os.path.join(LOG_DIR, "on-exit.log")
 
@@ -210,11 +212,11 @@ def build_context_filter(min_priority, span, lookahead, lookback):
     return f"( {pri_expr} ) or {due_expr} or {sched_expr}"
 
 def update_context_in_config():
-    """Update context.need.read in need.rc based on current lowest priority"""
+    """Set context.need.read in need.rc from the current lowest priority. Writes, logs and marks
+    cmx stale only when the filter changes. Returns True on success."""
     try:
         lowest = get_lowest_priority()
         if not lowest:
-            log("No pending tasks, clearing context filter")
             filter_expr = ""
         else:
             # Read all three config values directly from need.rc (no subprocesses)
@@ -225,24 +227,27 @@ def update_context_in_config():
             additional = get_config_value('additional.filters', '').strip()
             if additional:
                 filter_expr = f"{filter_expr} or {additional}"
-            log(f"Lowest priority: {lowest}, filter: {filter_expr}")
         
-        # Update need.rc
+        new_line = f'context.need.read={filter_expr}\n'
         lines = []
         found = False
         with open(CONFIG_FILE, 'r') as f:
             for line in f:
                 if line.startswith('context.need.read='):
-                    lines.append(f'context.need.read={filter_expr}\n')
+                    if line == new_line:
+                        return True             # unchanged: leave need.rc and cmx alone
+                    lines.append(new_line)
                     found = True
                 else:
                     lines.append(line)
         
         if not found:
-            lines.append(f'\ncontext.need.read={filter_expr}\n')
+            lines.append('\n' + new_line)
         
         _write_atomic(CONFIG_FILE, lines)
-        log(f"Updated context.need.read={filter_expr}")
+        with open(CMX_STALE_MARKER, 'a'):
+            pass
+        log(f"Lowest priority: {lowest}; updated context.need.read={filter_expr}")
         return True
         
     except Exception as e:
@@ -252,17 +257,10 @@ def update_context_in_config():
 def main():
     """Hook entry point"""
     try:
-        # Read task input (on-exit receives task input but doesn't output)
-        input_data = sys.stdin.read()
-        
-        log("=== ON-EXIT TRIGGERED ===")
-        log(f"Input received: {len(input_data)} bytes")
-        
-        # Update context filter
-        log("Calling update_context_in_config()")
-        result = update_context_in_config()
-        log(f"Update completed: {result}")
-        
+        # The tasks this command added or changed, one JSON per line; none for a report
+        if not sys.stdin.read().strip():
+            return 0
+        update_context_in_config()
         return 0
         
     except Exception as e:
