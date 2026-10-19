@@ -11,13 +11,14 @@ if _os_timing.environ.get('TW_TIMING'):
 
     _atexit.register(_report_timing)
 
-# version 0.6.0
+# version 0.6.1
 """
 on-exit_need-priority.py - Keep the need context filter in step with the tasks
 Part of tw-need_priority-hook
 
 Taskwarrior runs on-exit hooks after every command, with the tasks the command added or
-changed on stdin (nothing for a report). When any changed, this recomputes context.need.read
+changed on stdin (nothing for a report). When any changed (or the filter is still unset, as
+after a fresh install), this recomputes context.need.read
 from the lowest priority that has pending tasks, and rewrites need.rc only when the filter
 actually differs; then it touches ~/.task/config/.cmx_stale so tw rebuilds a cmx set that
 includes need. Adds, completions, deletions and priority changes all arrive here.
@@ -257,8 +258,9 @@ def update_context_in_config():
 def main():
     """Hook entry point"""
     try:
-        # The tasks this command added or changed, one JSON per line; none for a report
-        if not sys.stdin.read().strip():
+        # The tasks this command added or changed, one JSON per line; none for a report. With
+        # none, there is nothing to recompute, unless the filter is still unset (a fresh install).
+        if not sys.stdin.read().strip() and get_config_value('context.need.read', ''):
             return 0
         update_context_in_config()
         return 0

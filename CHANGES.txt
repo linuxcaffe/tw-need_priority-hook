@@ -1,6 +1,12 @@
 CHANGES for tw-priority-hook
 =============================
 
+v0.6.1 - 2026-10-19
+-------------------
+- on-exit: fills an unset context.need.read even after a report, so a fresh install (need.rc
+  ships the filter empty) has a working need context from the next task command
+- tests/test_need_hooks.py (11)
+
 v0.6.0 - 2026-10-19
 -------------------
 - on-exit: a command that changed no task (any report) returns at once. It used to export

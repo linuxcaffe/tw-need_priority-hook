@@ -5,6 +5,7 @@
   write, no log. It used to export every pending task and rewrite need.rc on every command.
 - When tasks changed, on-exit rewrites need.rc only if the filter differs, and then touches
   config/.cmx_stale so tw rebuilds a cmx set that includes need.
+- An unset filter (fresh install: need.rc ships it empty) is filled after any command.
 - on-add only assigns priority; the filter is on-exit's job (on-add's copy missed
   additional.filters).
 """
@@ -65,6 +66,13 @@ def test_exit_after_a_report_does_nothing(sandbox):
     assert not sandbox.calls.exists()
     assert sandbox.need.read_text() == NEED_RC
     assert not sandbox.marker.exists() and not sandbox.log.exists()
+
+
+def test_exit_fills_an_unset_filter_even_after_a_report(sandbox):
+    sandbox.need.write_text(NEED_RC.replace('context.need.read=OLD', 'context.need.read='))
+    sandbox.run('on-exit_need-priority.py', '')           # first command after a fresh install
+    assert sandbox.filter().startswith('context.need.read=( priority:3 or priority:4 )')
+    assert sandbox.marker.exists()
 
 
 def test_exit_after_a_change_updates_and_marks_cmx(sandbox):
