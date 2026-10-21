@@ -1,6 +1,12 @@
 CHANGES for tw-priority-hook
 =============================
 
+v0.6.3 - 2026-10-20
+-------------------
+- nn: usage prints again instead of "None". make-awesome's timing block sat above the module
+  docstring, so __doc__ was None; make-awesome 4.14.2 moves it below. The hooks' docstrings
+  were hidden the same way (harmless: they never read them) and move too
+
 v0.6.2 - 2026-10-19
 -------------------
 - on-modify ships again: `task 5 mod pri:H` became 2 only in a hook that was in the repo but
